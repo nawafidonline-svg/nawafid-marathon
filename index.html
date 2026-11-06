@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="ماراثون نوافذ: كل دروس المقطع في فيديو واحد مع أساتذة منصة نوافذ، ودروس الدعم عن بعد عبر الزوم.">
-<link rel="icon" href="img/logo.webp">
+<link rel="icon" href="logo.webp">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
 <body>
@@ -474,7 +474,7 @@ a.mcard:hover .thumb img { transform: scale(1.04); }
 
 <header class="bar wrap">
   <a class="brand" id="brand" href="#home" aria-label="ماراثون نوافذ، الرئيسية">
-    <span class="logo"><img src="img/logo.webp" alt="شعار نوافذ"></span>
+    <span class="logo"><img src="logo.webp" alt="شعار نوافذ"></span>
     <b>ماراثون <span>نوافذ</span></b>
   </a>
   <div class="bar-end">
@@ -496,7 +496,7 @@ a.mcard:hover .thumb img { transform: scale(1.04); }
 
 <section class="wrap" id="join">
   <div class="join">
-    <img src="img/nw_pointing.webp" alt="" aria-hidden="true">
+    <img src="nw_pointing.webp" alt="" aria-hidden="true">
     <div>
       <h2>تطمح للعلامة الكاملة؟</h2>
       <p id="joinText">أساتذة نوافذ يرافقونك خطوة بخطوة على منصة نوافذ التعليمية: حصص مباشرة، حصص مسجلة، وتمارين محلولة.</p>
@@ -531,68 +531,68 @@ a.mcard:hover .thumb img { transform: scale(1.04); }
 /* ---------- data: one entry per teacher → years → segments (marathons) ---------- */
 const DATA = {
   teachers: [
-    { id: "salim", name: "الأستاذ سليم مختارة", subject: "رياضيات", photo: "img/t_salim.webp", online: "img/o_salim.webp",
+    { id: "salim", name: "الأستاذ سليم مختارة", subject: "رياضيات", photo: "t_salim.webp", online: "o_salim.webp",
       social: { youtube: "https://www.youtube.com/@salimmokhtara", facebook: "https://www.facebook.com/Salim-Mokhtara-%D8%B3%D9%84%D9%8A%D9%85-%D9%85%D8%AE%D8%AA%D8%A7%D8%B1%D8%A9-1921629687886837/",
         instagram: "https://www.instagram.com/salim_mokhtara/",
         telegram: "https://t.me/salim_mokhtara" },
-      support: { ad: "img/ad_salim.webp", mid: [1, 2, 3, 4], sec: [1] },
+      support: { ad: "ad_salim.webp", mid: [1, 2, 3, 4], sec: [1] },
       years: [
         { id: "4am", label: "الرابعة متوسط", short: "4م", segments: [
-          { id: "1", title: "دروس المقطع الأول", thumb: "img/math4am.webp", duration: "1:45:54", youtube: null,
+          { id: "1", title: "دروس المقطع الأول", thumb: "math4am.webp", duration: "1:45:54", youtube: null,
             topics: ["PGCD", "الجذور التربيعية", "إنطاق المقام"],
             lessons: [
               ["قواسم عدد طبيعي والقاسم المشترك الأكبر PGCD", "0:38"], ["حساب PGCD بطريقة الطرح المتتالي", "19:04"],
               ["حساب PGCD بخوارزمية إقليدس", "24:32"], ["الأعداد الأولية فيما بينها والكسور غير القابلة للاختزال", "39:38"],
               ["العمليات على الجذور التربيعية", "54:11"], ["تبسيط الجذور والكتابة على الشكل a√b", "1:13:44"], ["إنطاق المقام بكل الحالات", "1:35:06"] ] }, { id: "2", soon: true }, { id: "3", soon: true } ] },
         { id: "3am", label: "الثالثة متوسط", short: "3م", segments: [
-          { id: "1", title: "دروس المقطع الأول", thumb: "img/math3am.webp", duration: "2:06:44", youtube: null,
+          { id: "1", title: "دروس المقطع الأول", thumb: "math3am.webp", duration: "2:06:44", youtube: null,
             topics: ["الأعداد النسبية", "الكسور", "الأعداد الناطقة"],
             lessons: [ ["جداء وقسمة الأعداد النسبية", "0:52"], ["مقلوب عدد غير معدوم وضرب وقسمة كسرين", "9:37"], ["مقارنة كسرين في جميع الحالات", "26:04"],
               ["جمع وطرح كسرين", "48:14"], ["مفهوم العدد الناطق", "1:00:49"], ["ضرب وقسمة عددين ناطقين", "1:34:50"], ["مجموع وفرق عددين ناطقين", "1:48:36"] ] }, { id: "2", soon: true }, { id: "3", soon: true } ] } ] },
-    { id: "hamiani", name: "الأستاذ حمياني", subject: "فيزياء", photo: "img/t_hamiani.webp", online: "img/o_hamiani.webp",
+    { id: "hamiani", name: "الأستاذ حمياني", subject: "فيزياء", photo: "t_hamiani.webp", online: "o_hamiani.webp",
       social: { youtube: "https://www.youtube.com/channel/UCFOxXondQVnfMmgM0E3jpSQ", facebook: "https://www.facebook.com/hamianiphysique",
         instagram: "https://www.instagram.com/hamiani_physique/" },
       years: [
         { id: "4am", label: "الرابعة متوسط", short: "4م", segments: [
-          { id: "1", title: "الظواهر الكهربائية", thumb: "img/phys4am.webp", duration: "1:51:16", youtube: null,
+          { id: "1", title: "الظواهر الكهربائية", thumb: "phys4am.webp", duration: "1:51:16", youtube: null,
             topics: ["التكهرب", "التحريض الكهرومغناطيسي", "الأمن الكهربائي"],
             lessons: [
               ["النموذج المبسط للذرة والشحنة الكهربائية", "0:32"], ["تفسير ظاهرة التكهرب: التكهرب بالدلك", "30:06"],
               ["تفسير ظاهرة التكهرب: التكهرب باللمس", "39:59"], ["النواقل والعوازل", "48:21"], ["ظاهرة التحريض الكهرومغناطيسي", "59:02"],
               ["خصائص التوتر الكهربائي المتناوب", "1:11:00"], ["الأمن الكهربائي", "1:33:25"] ] }, { id: "2", soon: true }, { id: "3", soon: true } ] },
         { id: "3am", label: "الثالثة متوسط", short: "3م", segments: [
-          { id: "1", title: "المادة وتحولاتها", thumb: "img/phys3am.webp", duration: "1:47:53", youtube: null,
+          { id: "1", title: "المادة وتحولاتها", thumb: "phys3am.webp", duration: "1:47:53", youtube: null,
             topics: ["الجملة الكيميائية", "الاحتراق", "موازنة المعادلات"],
             lessons: [
               ["الفرد الكيميائي والنوع الكيميائي والجملة الكيميائية", "0:26"], ["المادة وتحولاتها", "23:50"],
               ["الاحتراق التام وغير التام لفحم هيدروجيني (1)", "33:05"], ["الاحتراق التام وغير التام لفحم هيدروجيني (2)", "43:33"],
               ["موازنة معادلة التفاعل الكيميائي (1)", "53:18"], ["موازنة معادلة التفاعل الكيميائي (2)", "1:10:37"],
               ["العوامل المؤثرة في التفاعل الكيميائي", "1:34:33"] ] }, { id: "2", soon: true }, { id: "3", soon: true } ] } ] },
-    { id: "ouargli", name: "الأستاذ أسامة الورقلي", subject: "لغة عربية", photo: "img/t_ouargli.webp", online: "img/o_ouargli.webp", years: [],
+    { id: "ouargli", name: "الأستاذ أسامة الورقلي", subject: "لغة عربية", photo: "t_ouargli.webp", online: "o_ouargli.webp", years: [],
       social: { youtube: "https://www.youtube.com/@oussamalouergli", facebook: "https://www.facebook.com/oussamalouergli", instagram: "https://www.instagram.com/louerglioussama/" },
-      support: { ad: "img/ad_ouargli.webp", mid: [1, 2, 3, 4], sec: [] } },
-    { id: "faidi", name: "الأستاذ الفايدي", subject: "علوم طبيعية", photo: "img/t_faidi.webp", online: "img/o_faidi.webp", years: [],
+      support: { ad: "ad_ouargli.webp", mid: [1, 2, 3, 4], sec: [] } },
+    { id: "faidi", name: "الأستاذ الفايدي", subject: "علوم طبيعية", photo: "t_faidi.webp", online: "o_faidi.webp", years: [],
       social: { youtube: "https://www.youtube.com/channel/UCd4ljTpVJkIS24lUBmyVdIA", facebook: "https://www.facebook.com/prof.elfaidi.science",
         instagram: "https://www.instagram.com/prof.elfaidi.science/" },
-      support: { ad: "img/ad_faidi.webp", mid: [1, 2, 3, 4], sec: [1] } },
-    { id: "sahnoun", name: "الأستاذ جلال سحنون", subject: "لغة فرنسية", photo: "img/t_sahnoun.webp", online: "img/o_sahnoun.webp", years: [],
+      support: { ad: "ad_faidi.webp", mid: [1, 2, 3, 4], sec: [1] } },
+    { id: "sahnoun", name: "الأستاذ جلال سحنون", subject: "لغة فرنسية", photo: "t_sahnoun.webp", online: "o_sahnoun.webp", years: [],
       social: { youtube: "https://www.youtube.com/@prof_sahnoun_djalal", facebook: "https://www.facebook.com/Djalal.SAHNOUN",
         instagram: "https://www.instagram.com/prof_sahnoun_djalal/" } },
-    { id: "boualem", name: "الأستاذ هاني بوعلام", subject: "فيزياء", photo: "img/t_boualem.webp", online: "img/o_boualem.webp", years: [],
+    { id: "boualem", name: "الأستاذ هاني بوعلام", subject: "فيزياء", photo: "t_boualem.webp", online: "o_boualem.webp", years: [],
       social: { youtube: "https://www.youtube.com/channel/UCK25FKqmB39BqrGv3-k4ETw", facebook: "https://www.facebook.com/profile.php?id=61587949344175",
         instagram: "https://www.instagram.com/hani.boualam/" },
-      support: { ad: "img/ad_boualem.webp", mid: [1, 2, 3, 4], sec: [] } },
+      support: { ad: "ad_boualem.webp", mid: [1, 2, 3, 4], sec: [] } },
   ],
 };
 
 /* each subject gets its own light in the window, and its own symbols drifting behind the teacher */
 const SUBJECTS = {
-  "رياضيات":     { c: "#f5c542", bg: "img/bg_math.webp",    g: ["√x", "π", "∑", "a²", "÷", "%"] },
-  "فيزياء":      { c: "#5cc8ff", bg: "img/bg_physics.webp", g: ["Ω", "λ", "U=RI", "e⁻", "Hz", "V"] },
-  "لغة عربية":   { c: "#4fd6a0", bg: "img/bg_arabic.webp",  g: ["ض", "ع", "ق", "ن", "ب", "ح"] },
-  "علوم طبيعية": { c: "#a6e35f", bg: "img/bg_science.webp", g: ["ADN", "H₂O", "CO₂", "O₂", "pH", "μm"] },
-  "لغة فرنسية":  { c: "#ff8f78", bg: "img/bg_french.webp",  g: ["é", "ç", "à", "ê", "Bonjour", "ù"] },
-  "لغة إنجليزية": { c: "#b9a4ff", bg: "img/bg_english.webp", g: ["Hello", "ABC", "the", "&", "?", "is"] },
+  "رياضيات":     { c: "#f5c542", bg: "bg_math.webp",    g: ["√x", "π", "∑", "a²", "÷", "%"] },
+  "فيزياء":      { c: "#5cc8ff", bg: "bg_physics.webp", g: ["Ω", "λ", "U=RI", "e⁻", "Hz", "V"] },
+  "لغة عربية":   { c: "#4fd6a0", bg: "bg_arabic.webp",  g: ["ض", "ع", "ق", "ن", "ب", "ح"] },
+  "علوم طبيعية": { c: "#a6e35f", bg: "bg_science.webp", g: ["ADN", "H₂O", "CO₂", "O₂", "pH", "μm"] },
+  "لغة فرنسية":  { c: "#ff8f78", bg: "bg_french.webp",  g: ["é", "ç", "à", "ê", "Bonjour", "ù"] },
+  "لغة إنجليزية": { c: "#b9a4ff", bg: "bg_english.webp", g: ["Hello", "ABC", "the", "&", "?", "is"] },
 };
 /* line drawings of each subject's world (viewBox 400×400), drawn behind the teacher */
 const SCENES = {
@@ -662,7 +662,7 @@ function glyphs(list) {
 }
 function lane(progressLabel) {
   return `<div class="lane" aria-hidden="true"><span class="start">الانطلاق</span>
-    <img class="runner" src="img/nw_running.webp" alt="">
+    <img class="runner" src="nw_running.webp" alt="">
     <span class="finish"><span class="flag"></span>${progressLabel}</span></div>`;
 }
 function stage(t, inner, subjectLabel) {
@@ -754,7 +754,7 @@ document.addEventListener("click", (e) => {
 /* ---------- views ---------- */
 function viewLanding() {
   const segs = allSegs();
-  const pseudo = { name: "ماراثون نوافذ", subject: "", photo: "img/nw_running.webp" };
+  const pseudo = { name: "ماراثون نوافذ", subject: "", photo: "nw_running.webp" };
   return `
   ${stage(pseudo, `
     <p class="eyebrow">${panes} منصة نوافذ · التعليم المتوسط</p>
@@ -811,7 +811,7 @@ function viewTeacher(t) {
     return stage(t, teacherCopy(t, `<div class="clock"><div><b>قريبًا</b><span>أول ماراثون</span></div></div>`,
       `ماراثونات ${esc(t.name)} قيد التحضير: كلّ دروس المقطع في فيديو واحد، مرتبةً حسب السنة والمقطع. احفظ هذا الرابط وعُد إليه.`), t.subject) + `
     <div class="sec"><h2>الماراثونات</h2><small>على خط الانطلاق</small></div>
-    <div class="grid"><div class="mcard soon"><div class="thumb"><img src="img/nw_thinking.webp" alt=""></div>
+    <div class="grid"><div class="mcard soon"><div class="thumb"><img src="nw_thinking.webp" alt=""></div>
       <div class="body"><h3>نوّاف يجهّز أول ماراثون</h3><div class="meta">تابع حسابات الأستاذ ليصلك الجديد أولًا</div></div></div></div>` + supportBlock(t);
   }
   const hrs = totalH(segs.map(({ s }) => s));
@@ -847,7 +847,7 @@ function viewMarathon(t, y, s) {
       <div class="chips facts"><span class="chip acc">${lessonsWord(s.lessons.length)}</span><span class="chip">${esc(s.duration)}</span>
         ${s.topics.map((x) => `<span class="chip">${esc(x)}</span>`).join("")}</div>
       <div class="progress">
-        <img src="img/${finished ? "nw_gold_medal" : done.size ? "nw_pointing" : "nw_running"}.webp" alt="">
+        <img src="${finished ? "nw_gold_medal" : done.size ? "nw_pointing" : "nw_running"}.webp" alt="">
         <div><b>${finished ? "أحسنت يا بطل! وصلت إلى خط النهاية" : done.size ? `محطتك التالية: ${esc(s.lessons[next][0])}` : "ابدأ من المحطة الأولى"}</b>
           <span>${done.size} من ${s.lessons.length} · ${pct}%</span>
           <div class="meter"><i style="width:${pct}%"></i></div></div>
