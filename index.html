@@ -74,6 +74,9 @@ img { max-width: 100%; }
   padding-block: 12px; background: color-mix(in srgb, var(--ink) 86%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
 .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
 .brand .logo { background: #fff; border-radius: 12px; padding: 5px; width: 44px; height: 44px; display: grid; place-items: center; }
+.brand .mascot { width: 50px; height: 50px; flex: none; display: grid; place-items: center; }
+.brand .mascot img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3)); transition: transform .2s ease; }
+.brand:hover .mascot img { transform: rotate(-6deg) scale(1.06); }
 .brand b { font-family: var(--display); font-weight: 800; font-size: 20px; letter-spacing: -0.2px; white-space: nowrap; }
 .brand b span { color: var(--gold); }
 .bar-end { display: flex; gap: 10px; align-items: center; }
@@ -474,7 +477,7 @@ a.mcard:hover .thumb img { transform: scale(1.04); }
 
 <header class="bar wrap">
   <a class="brand" id="brand" href="#home" aria-label="ماراثون نوافذ، الرئيسية">
-    <span class="logo"><img src="logo.webp" alt="شعار نوافذ"></span>
+    <span class="mascot"><img src="nw_head.webp" alt="نوّاف"></span>
     <b>ماراثون <span>نوافذ</span></b>
   </a>
   <div class="bar-end">
