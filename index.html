@@ -215,7 +215,7 @@ img { max-width: 100%; }
 /* a wide photo (plaque, raised hand) shown whole inside the pane */
 .figure.edge-contain .teacher { width: 100%; height: auto; max-height: 100%; }
 /* animated subject object floating at the window's top-left corner (the arch leaves that corner empty) */
-.fx { position: absolute; z-index: 3; left: -9%; top: -5%; width: 50%; height: 56%; pointer-events: none;
+.fx { position: absolute; z-index: 3; left: -11%; top: -5%; width: 46%; height: 56%; pointer-events: none;
   filter: drop-shadow(0 0 14px color-mix(in srgb, var(--acc) 55%, transparent)); }
 .badge-subj { position: absolute; top: 15%; right: 0; transform: rotate(6deg); z-index: 4; font-family: var(--display); font-weight: 800; font-size: 15px; color: var(--on-acc);
   background: var(--acc); padding: 6px 14px; border-radius: 10px; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35); }
@@ -701,7 +701,8 @@ const FX = {
   "لغة إنجليزية"(g, w, h, t, c) { floatLetters(g, w, h, t, c, ["A", "b", "C", "e", "?", "&", "the", "is"]); },
 };
 function letterWrite(g, w, h, t, c, letters, font, dir) {
-  const cyc = 3.2, i = Math.floor(t / cyc) % letters.length, p = (t % cyc) / cyc, size = Math.min(w, h) * 0.78;
+  const cyc = 3.2, i = Math.floor(t / cyc) % letters.length, p = (t % cyc) / cyc, size = Math.min(w, h) * 0.5;
+  w = w * 0.72; /* keep the letter in the outer part of the canvas, away from the teacher's face */
   g.font = `800 ${size}px ${font}`; g.textAlign = "center"; g.textBaseline = "middle";
   const reveal = Math.min(1, p / 0.6), fade = p > 0.85 ? 1 - (p - 0.85) / 0.15 : 1;
   g.save(); g.beginPath(); const x0 = dir < 0 ? w - w * reveal : 0; g.rect(x0, 0, w * reveal, h); g.clip();
@@ -711,8 +712,8 @@ function letterWrite(g, w, h, t, c, letters, font, dir) {
 }
 function floatLetters(g, w, h, t, c, letters) {
   letters.forEach((L, i) => {
-    const sp = 0.12 + (i % 3) * 0.04, ph = (t * sp + i / letters.length) % 1, x = w * (0.15 + 0.7 * ((i * 0.37) % 1)) + Math.sin(t + i) * 10, y = h * (1.05 - ph * 1.1);
-    const size = Math.min(w, h) * (0.16 + (i % 3) * 0.07), sx = Math.cos(t * 1.4 + i);
+    const sp = 0.12 + (i % 3) * 0.04, ph = (t * sp + i / letters.length) % 1, x = w * (0.1 + 0.48 * ((i * 0.37) % 1)) + Math.sin(t + i) * 8, y = h * (1.05 - ph * 1.1);
+    const size = Math.min(w, h) * (0.13 + (i % 3) * 0.05), sx = Math.cos(t * 1.4 + i);
     g.save(); g.translate(x, y); g.scale(sx, 1); g.globalAlpha = Math.sin(ph * Math.PI) * 0.95;
     g.font = `800 ${size}px "Alexandria", sans-serif`; g.textAlign = "center"; g.textBaseline = "middle";
     g.fillStyle = i % 2 ? "#fff" : c; g.fillText(L, 0, 0); g.restore();
