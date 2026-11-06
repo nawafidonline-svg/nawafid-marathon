@@ -1,0 +1,26 @@
+server {
+    listen ${PORT};
+    root /usr/share/nginx/html;
+    index index.html;
+    charset utf-8;
+
+    # all files sit flat in the repository root; the page asks for img/<name>.webp
+    location /img/ {
+        alias /usr/share/nginx/html/;
+        expires 30d;
+        add_header Cache-Control "public";
+    }
+
+    # short teacher links: /salim -> /#salim
+    location ~ ^/(salim|hamiani|ouargli|faidi|sahnoun|boualem)/?$ {
+        return 302 /#$1;
+    }
+
+    location = /index.html {
+        add_header Cache-Control "no-cache";
+    }
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
