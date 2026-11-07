@@ -359,6 +359,10 @@ a.mcard:hover .thumb img { transform: scale(1.04); }
 .player img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .player .bib { top: 14px; right: 14px; }
 .player .play { position: absolute; left: 16px; bottom: 16px; z-index: 1; }
+.player iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; z-index: 2; background: #000; }
+.player button.btn { border: 0; cursor: pointer; font: inherit; font-family: var(--display); font-weight: 700; font-size: 16px; }
+.yt-out { display: inline-block; margin-top: 8px; font-size: 13px; color: var(--muted); text-decoration: none; }
+.yt-out:hover { color: var(--acc-text); }
 .btn { display: inline-flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 700; font-size: 16px; border-radius: 14px; padding: 10px 20px; text-decoration: none; }
 .btn.red { background: #e62117; color: #fff; }
 .btn.ghost { background: rgba(6, 19, 26, 0.85); color: var(--fg); border: 1px solid var(--line); }
@@ -990,9 +994,10 @@ function viewMarathon(t, y, s) {
   <div class="head">${miniArch(t)}<div><h1>${esc(s.title)}</h1><p>${esc(t.name)} · ${esc(t.subject || "")} · ${esc(y.label)}</p></div></div>
   <div class="mara">
     <div>
-      <div class="player"><img src="${s.thumb}" alt="${esc(s.title)}">${bib(y, s)}
-        <div class="play">${yt ? `<a class="btn red" href="https://www.youtube.com/watch?v=${yt}" target="_blank" rel="noopener">${playIcon} شاهد الماراثون</a>`
+      <div class="player" id="ytPlayer"${yt ? ` data-yt="${yt}" data-title="${esc(s.title)}"` : ""}><img src="${s.thumb}" alt="${esc(s.title)}">${bib(y, s)}
+        <div class="play">${yt ? `<button class="btn red" type="button" data-seek="0">${playIcon} شاهد الماراثون</button>`
           : `<span class="btn ghost">يُنشر قريبًا على يوتيوب</span>`}</div></div>
+      ${yt ? `<a class="yt-out" href="https://www.youtube.com/watch?v=${yt}" target="_blank" rel="noopener">فتح على يوتيوب ↗</a>` : ""}
       <div class="chips facts"><span class="chip acc">${lessonsWord(s.lessons.length)}</span><span class="chip">${esc(s.duration)}</span>
         ${s.topics.map((x) => `<span class="chip">${esc(x)}</span>`).join("")}</div>
       <div class="progress">
@@ -1007,7 +1012,7 @@ function viewMarathon(t, y, s) {
       <ol class="lessons">${s.lessons.map(([title, time], i) => `
         <li class="lesson${done.has(i) ? " done" : ""}${i === next && !finished ? " next" : ""}">
           <span class="station">${String(i + 1).padStart(2, "0")}</span>
-          <div class="t"><b>${esc(title)}</b>${link(time) ? `<a href="${link(time)}" target="_blank" rel="noopener">▶ يبدأ عند ${time}</a>` : `<span>يبدأ عند ${time}</span>`}</div>
+          <div class="t"><b>${esc(title)}</b>${link(time) ? `<a href="${link(time)}" data-seek="${secs(time)}">▶ شاهد من ${time}</a>` : `<span>يبدأ عند ${time}</span>`}</div>
           <label class="check" for="c${i}"><input type="checkbox" id="c${i}" data-i="${i}" ${done.has(i) ? "checked" : ""}> أنهيته</label>
         </li>`).join("")}</ol>
     </div>
@@ -1064,6 +1069,16 @@ function render() {
 const toSupport = () => { const el = document.getElementById(location.hash.slice(1) + "-sec"); if (location.hash.endsWith("-support") && el) { el.scrollIntoView({ behavior: "smooth" }); return true; } return false; };
 addEventListener("hashchange", () => { render(); if (!toSupport()) scrollTo(0, 0); });
 render(); toSupport();
+/* play the marathon inside the page; a station jumps the same player to its lesson */
+document.addEventListener("click", (e) => {
+  const b = e.target.closest("[data-seek]"); if (!b) return;
+  const p = document.getElementById("ytPlayer"); if (!p || !p.dataset.yt) return;
+  e.preventDefault();
+  const start = parseInt(b.dataset.seek, 10) || 0;
+  p.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${p.dataset.yt}?start=${start}&autoplay=1&rel=0&modestbranding=1&playsinline=1"
+    title="${p.dataset.title || "ماراثون نوافذ"}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+  p.scrollIntoView({ behavior: "smooth", block: "center" });
+});
 /* hero button: glide straight to the Zoom registration (levels + contact) without reloading the page */
 document.addEventListener("click", (e) => {
   const a = e.target.closest("[data-jump]"); if (!a) return;
