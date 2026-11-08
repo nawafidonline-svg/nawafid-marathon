@@ -306,6 +306,16 @@ a.mcard:hover .thumb img { transform: scale(1.04); }
   .mbody { padding: 16px; }
 }
 
+/* lesson marathons vs proposed exam models */
+.ktabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; padding: 6px; margin-bottom: 16px; border-radius: 16px; background: var(--panel); border: 1px solid var(--line); }
+.ktab { display: inline-flex; align-items: center; justify-content: center; gap: 9px; padding: 11px 12px; border: 0; border-radius: 12px; cursor: pointer;
+  font-family: var(--display); font-weight: 800; font-size: 16px; background: transparent; color: var(--muted); }
+.ktab svg { width: 20px; height: 20px; fill: currentColor; flex: none; }
+.ktab i { font-style: normal; font-size: 12px; min-width: 22px; padding: 1px 7px; border-radius: 999px; background: var(--tint); }
+.ktab[aria-selected="true"] { background: var(--acc); color: var(--on-acc); box-shadow: 0 8px 20px color-mix(in srgb, var(--acc) 30%, transparent); }
+.ktab[aria-selected="true"] i { background: rgba(0, 0, 0, 0.15); }
+@media (max-width: 480px) { .ktab { font-size: 14px; padding: 10px 6px; } }
+
 /* year tabs + the season's route of segments (checkpoints) above one lane card */
 .ytabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
 .ytab { font-family: var(--display); font-weight: 700; font-size: 15px; padding: 8px 18px; border-radius: 12px; border: 1px solid var(--line);
@@ -604,7 +614,11 @@ const DATA = {
               ["الفرد الكيميائي والنوع الكيميائي والجملة الكيميائية", "0:26"], ["المادة وتحولاتها", "23:50"],
               ["الاحتراق التام وغير التام لفحم هيدروجيني (1)", "33:05"], ["الاحتراق التام وغير التام لفحم هيدروجيني (2)", "43:33"],
               ["موازنة معادلة التفاعل الكيميائي (1)", "53:18"], ["موازنة معادلة التفاعل الكيميائي (2)", "1:10:37"],
-              ["العوامل المؤثرة في التفاعل الكيميائي", "1:34:33"] ] }, { id: "2", soon: true }, { id: "3", soon: true } ] } ] },
+              ["العوامل المؤثرة في التفاعل الكيميائي", "1:34:33"] ] }, { id: "2", soon: true }, { id: "3", soon: true } ] },
+        { id: "2am", label: "الثانية متوسط", short: "2م", segments: [], exams: [
+          { id: "f1", bib: "ف1", title: "مراجعة الفرض الأول: نموذجان مقترحان مع الحل", thumb: "exam_phys2am_f1.webp", duration: "40:49", youtube: "_3TTDH_7De8",
+            topics: ["الفرض الأول", "نموذجان مقترحان", "حل مفصّل"],
+            lessons: [ ["النموذجان المقترحان مع الحل المفصّل", "0:00"] ] } ] } ] },
     { id: "ouargli", name: "الأستاذ أسامة الورقلي", subject: "لغة عربية", photo: "t_ouargli.webp", online: "o_ouargli.webp", years: [],
       social: { youtube: "https://www.youtube.com/@oussamalouergli", facebook: "https://www.facebook.com/oussamalouergli", instagram: "https://www.instagram.com/louerglioussama/" },
       support: { ad: "ad_ouargli.webp", mid: [1, 2, 3, 4], sec: [] } },
@@ -833,7 +847,7 @@ function stage(t, inner, subjectLabel) {
     </div>
     ${lane("خط الوصول")}</section>`;
 }
-function bib(y, s) { return `<span class="bib"><small>ماراثون نوافذ</small><b>${esc(y.short)}·${String(s.id).padStart(2, "0")}</b></span>`; }
+function bib(y, s) { return `<span class="bib"><small>ماراثون نوافذ</small><b>${esc(y.short)}·${s.bib ? esc(s.bib) : String(s.id).padStart(2, "0")}</b></span>`; }
 function mcard(t, y, s) {
   return `<a class="mcard" href="#${t.id}-${y.id}-${s.id}">
     <div class="thumb"><img src="${s.thumb}" alt="${esc(s.title)}" loading="lazy">${bib(y, s)}<span class="play-dot">${playIcon}</span></div>
@@ -852,8 +866,8 @@ function mlane(t, y, s) {
   return `<article class="mlane"${bg ? ` style="--bgimg:url('${bg}')"` : ""}>
     <a class="mthumb" href="${href}" aria-label="${esc(s.title)}"><img src="${s.thumb}" alt="" loading="lazy">${bib(y, s)}<span class="play-dot">${playIcon}</span></a>
     <div class="mbody">
-      <div><h3>${esc(s.title)}</h3><div class="meta">${esc(y.label)} · المقطع ${s.id === "1" ? "الأول" : esc(s.id)} · ${esc(s.duration)}</div></div>
-      <div class="mprog"><span>${done.size ? `أنهيتَ ${done.size} من ${s.lessons.length} محطات` : `${lessonsWord(s.lessons.length)} على خط واحد`}</span><span class="flag" aria-hidden="true"></span>
+      <div><h3>${esc(s.title)}</h3><div class="meta">${esc(y.label)} · ${s.bib ? "نموذج مقترح" : `المقطع ${s.id === "1" ? "الأول" : esc(s.id)}`} · ${esc(s.duration)}</div></div>
+      <div class="mprog"><span>${done.size ? `أنهيتَ ${done.size} من ${s.lessons.length} محطات` : (s.bib ? "نماذج مقترحة مع الحل المفصّل في فيديو واحد" : `${lessonsWord(s.lessons.length)} على خط واحد`)}</span><span class="flag" aria-hidden="true"></span>
         <div class="meter"><i style="width:${pct}%"></i></div></div>
       <ol class="mstations">${s.lessons.map(([n, tm], i) => `<li class="${done.has(i) ? "done" : ""}${i === next && done.size ? " next" : ""}">
         <span class="st">${String(i + 1).padStart(2, "0")}</span><span class="nm" title="${esc(n)}">${esc(n)}</span><span class="tm">${tm}</span></li>`).join("")}</ol>
@@ -867,17 +881,36 @@ const ORD = ["الأول", "الثاني", "الثالث", "الرابع", "ال
 const SEL = {}; // per teacher: { y: year id, s: segment id } for this visit
 const lockIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10V8a5 5 0 0 1 10 0v2h1a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1zm2 0h6V8a3 3 0 0 0-6 0z"/></svg>';
 const doneOf = (t, y, s) => new Set(store.get(`done:${t.id}:${y.id}:${s.id}`)).size;
+const examsOf = (y) => y.exams || [];
+const KIND_ICON = {
+  lessons: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a1 1 0 0 0 0 2h13v2H6a3 3 0 0 1-3-3V5zm4 1v2h8V6z"/></svg>',
+  exams: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 2h6a1 1 0 0 1 1 1v1h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2V3a1 1 0 0 1 1-1zm1 2v2h4V4zm-2.3 9.3 1.4-1.4 1.9 1.9 4.4-4.4 1.4 1.4-5.8 5.8z"/></svg>' };
 function marathonsBlock(t, fixedYear) {
   const st = (SEL[t.id] ||= {});
-  const y = t.years.find((x) => x.id === (fixedYear || st.y)) || t.years[0];
+  /* two kinds: lesson marathons and proposed exam models (each kind lists only the years that have it) */
+  const has = { lessons: t.years.some((y) => y.segments.length), exams: t.years.some((y) => examsOf(y).length) };
+  if (fixedYear) { const fy = t.years.find((x) => x.id === fixedYear); if (fy && !fy.segments.length && examsOf(fy).length) st.k = "exams"; }
+  if (!st.k || !has[st.k]) st.k = has.lessons ? "lessons" : "exams";
+  const yearsK = t.years.filter((y) => (st.k === "lessons" ? y.segments.length : examsOf(y).length));
+  const y = yearsK.find((x) => x.id === (fixedYear || st.y)) || yearsK[0];
+  if (!y) return "";
   st.y = y.id;
+  const nEx = t.years.reduce((a, x) => a + examsOf(x).length, 0);
+  const ktabs = has.lessons && has.exams ? `<div class="ktabs" role="tablist" aria-label="نوع الماراثون">
+    <button class="ktab" type="button" role="tab" data-kind="lessons" aria-selected="${st.k === "lessons"}">${KIND_ICON.lessons}ماراثونات الدروس</button>
+    <button class="ktab" type="button" role="tab" data-kind="exams" aria-selected="${st.k === "exams"}">${KIND_ICON.exams}النماذج المقترحة <i>${nEx}</i></button></div>` : "";
+  const ytabsK = !fixedYear && yearsK.length > 1 ? `<div class="ytabs" role="tablist" aria-label="السنة الدراسية">${yearsK.map((x) =>
+    `<button class="ytab" type="button" role="tab" data-ytab="${x.id}" aria-selected="${x.id === y.id}"><b>${esc(x.short)}</b>${esc(x.label)}</button>`).join("")}</div>` : "";
+  if (st.k === "exams") return ktabs + ytabsK + `<div class="lanes">${examsOf(y).map((s) => mlane(t, y, s)).join("")}</div>`;
+  if (ktabs) return ktabs + ytabsK + lessonsRoute(t, y, st);
+  return ytabsK + lessonsRoute(t, y, st);
+}
+function lessonsRoute(t, y, st) {
   const ready = y.segments.filter((s) => !s.soon);
   if (!ready.some((s) => s.id === st.s)) {
     const started = ready.find((s) => { const d = doneOf(t, y, s); return d > 0 && d < s.lessons.length; });
     st.s = (started || ready[ready.length - 1])?.id;
   }
-  const tabs = !fixedYear && t.years.length > 1 ? `<div class="ytabs" role="tablist" aria-label="السنة الدراسية">${t.years.map((x) =>
-    `<button class="ytab" type="button" role="tab" data-ytab="${x.id}" aria-selected="${x.id === y.id}"><b>${esc(x.short)}</b>${esc(x.label)}</button>`).join("")}</div>` : "";
   let reached = true;
   const route = `<ol class="route" aria-label="مقاطع ${esc(y.label)}">${y.segments.map((s, i) => {
     const n = String(i + 1).padStart(2, "0"), name = `المقطع ${ORD[i] || i + 1}`;
@@ -888,7 +921,7 @@ function marathonsBlock(t, fixedYear) {
       aria-current="${s.id === st.s}"><i>${d === L ? "✓" : n}</i><b>${name}</b><small>${d ? `${d}/${L}` : lessonsWord(L)}</small></button></li>`;
   }).join("")}</ol>`;
   const s = ready.find((x) => x.id === st.s);
-  return tabs + route + (s ? mlane(t, y, s) : "");
+  return route + (s ? mlane(t, y, s) : "");
 }
 function rerenderTrack() {
   const el = document.getElementById("mtrack"); if (!el) return;
@@ -899,6 +932,8 @@ document.addEventListener("click", (e) => {
   const el = document.getElementById("mtrack"); if (!el || !el.contains(e.target)) return;
   const st = SEL[el.dataset.t];
   const tab = e.target.closest("[data-ytab]"), seg = e.target.closest("[data-seg]");
+  const kind = e.target.closest("[data-kind]");
+  if (kind) { st.k = kind.dataset.kind; st.y = undefined; st.s = undefined; rerenderTrack(); return; }
   if (tab) { st.y = tab.dataset.ytab; st.s = undefined; rerenderTrack(); }
   else if (seg) { st.s = seg.dataset.seg; rerenderTrack(); }
 });
@@ -926,7 +961,7 @@ function teacherCopy(t, clock, lede) {
   return `<p class="eyebrow">${panes} ماراثون نوافذ${t.subject ? " · " + esc(t.subject) : ""}</p>
     <h1 class="name"><small>الأستاذ</small><span class="u">${esc(short(t))}</span></h1>
     <p class="lede">${lede}</p>${clock}
-    ${t.support ? `<div class="cta-row"><a class="hero-cta" href="#${t.id}-support" data-jump="${t.id}-support-sec">دروس الدعم عن بعد مع الأستاذ <i>التسجيلات مفتوحة</i></a></div>` : ""}
+    ${t.support ? `<div class="cta-row"><a class="hero-cta" href="#${t.id}-support" data-jump="${t.id}-support-sec">دروس الدعم عن بعد مع الأستاذ <i>تنطلق قريبًا</i></a></div>` : ""}
     ${follow(t)}`;
 }
 
@@ -944,7 +979,7 @@ function supportBlock(t) {
       <figcaption><small>مع الأستاذ</small><b>${esc(short(t))}</b></figcaption></figure>
     <div>
       <span class="zoom-tag"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm14 3 4-3v10l-4-3z"/></svg></i>دروس الدعم عبر الزوم</span>
-      <h2>التسجيلات مفتوحة <em>للفصل الثاني</em></h2>
+      <h2>التسجيلات للفصل الثاني <em>تنطلق قريبًا</em></h2>
       <p class="season">الموسم الدراسي 2026 / 2027</p>
       <dl class="facts-box">
         <div><dt>الأستاذ</dt><dd>${esc(t.name)}</dd></div>
@@ -1026,7 +1061,8 @@ function renderSide(h, t) {
   const on = (id, extra = "") => (h === id ? ` class="on ${extra}" aria-current="page"` : extra ? ` class="${extra}"` : "");
   const years = t.years.map((y) => `<li><a href="#${t.id}-${y.id}"${on(`${t.id}-${y.id}`)}><span class="lvl">${esc(y.short)}</span>${esc(y.label)}</a>
     <ul>${y.segments.map((s, i) => s.soon ? `<li><span class="off sm">المقطع ${ORD[i] || i + 1}<span class="pill">قريبًا</span></span></li>`
-      : `<li><a href="#${t.id}-${y.id}-${s.id}"${on(`${t.id}-${y.id}-${s.id}`, "sm")}>${esc(s.title)}</a></li>`).join("")}</ul></li>`).join("");
+      : `<li><a href="#${t.id}-${y.id}-${s.id}"${on(`${t.id}-${y.id}-${s.id}`, "sm")}>${esc(s.title)}</a></li>`).join("")}${examsOf(y).map((s) =>
+      `<li><a href="#${t.id}-${y.id}-${s.id}"${on(`${t.id}-${y.id}-${s.id}`, "sm")}>${esc(s.title)}<span class="pill">نموذج</span></a></li>`).join("")}</ul></li>`).join("");
   const socials = socialList(t).map(([k, n, c, d]) => `<li><a href="${esc(t.social[k])}" target="_blank" rel="noopener">${sico(c, d)}${n}</a></li>`).join("");
   $("#side").innerHTML = `<a class="who" href="#${t.id}"${h === t.id ? ' aria-current="page"' : ""}>${miniArch(t)}<span><b>${esc(t.name)}</b><small>${esc(t.subject || "")}</small></span></a>
     <h4>السنوات والمقاطع</h4><ul>${years || '<li><span class="off"><span class="lvl">…</span>الماراثونات قريبًا</span></li>'}</ul>
@@ -1047,7 +1083,7 @@ function render() {
   const [ti, yi, si] = h.split("-");
   const t = DATA.teachers.find((x) => x.id === ti);
   const y = t && yi && yi !== "support" ? t.years.find((x) => x.id === yi) : null;
-  const s = y && si ? y.segments.find((x) => x.id === si && !x.soon) : null;
+  const s = y && si ? (y.segments.find((x) => x.id === si && !x.soon) || (y.exams || []).find((x) => x.id === si)) : null;
   document.documentElement.style.setProperty("--acc", (t && SUBJECTS[t.subject]?.c) || "#f2bf3a");
   renderSide(h, t);
   $("#brand").setAttribute("href", t ? `#${t.id}` : "#home");
