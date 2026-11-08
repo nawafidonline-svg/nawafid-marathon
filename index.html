@@ -306,6 +306,39 @@ a.mcard:hover .thumb img { transform: scale(1.04); }
   .mbody { padding: 16px; }
 }
 
+/* attached PDF files */
+.files { margin-top: 18px; padding: 18px; border-radius: 20px; background: var(--panel); border: 1px solid var(--line); }
+.files-h { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.files-h svg { width: 22px; height: 22px; fill: var(--acc-text); }
+.files-h b { font-family: var(--display); font-weight: 800; font-size: 18px; }
+.files-h i { font-style: normal; font-size: 12px; padding: 1px 9px; border-radius: 999px; background: var(--tint); color: var(--muted); }
+.file-list { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
+.file { --k: #4c8dff; display: flex; flex-direction: column; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: var(--deep); min-width: 0; }
+.file[data-kind="solution"] { --k: #2fbf71; } .file[data-kind="summary"] { --k: #e8b130; } .file[data-kind="exercises"] { --k: #a07cff; }
+.file .pv { position: relative; aspect-ratio: 4 / 3; max-width: 100%; background: #fff; overflow: hidden; cursor: zoom-in; border: 0; padding: 0; display: block; width: 100%; }
+.file .pv img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; transition: transform .3s ease; }
+.file .pv:hover img { transform: scale(1.04); }
+.file .pv::after { content: ""; position: absolute; inset: auto 0 0; height: 40%; background: linear-gradient(0deg, rgba(0, 0, 0, 0.35), transparent); }
+.file .kind { position: absolute; z-index: 1; top: 10px; right: 10px; font-family: var(--display); font-weight: 800; font-size: 12px; color: #fff; background: var(--k); padding: 3px 10px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); }
+.file .pdf { position: absolute; z-index: 1; left: 10px; bottom: 10px; font-family: var(--display); font-weight: 800; font-size: 11px; color: #fff; background: #d93025; padding: 2px 7px; border-radius: 5px; }
+.file .fb { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 8px; border-top: 3px solid var(--k); }
+.file .fb b { font-weight: 600; font-size: 15px; line-height: 1.45; }
+.file .fb small { color: var(--muted); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.file .acts { display: flex; gap: 8px; }
+.file .acts a, .file .acts button { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 10px; border-radius: 10px; font-family: var(--display); font-weight: 700; font-size: 14px; text-decoration: none; cursor: pointer; border: 0; }
+.file .acts .view { background: var(--k); color: #fff; }
+.file .acts .dl { background: var(--tint); color: var(--fg); border: 1px solid var(--line); }
+.file .acts svg { width: 16px; height: 16px; fill: currentColor; }
+.chip.clip { display: inline-flex; align-items: center; gap: 4px; }
+.chip.clip svg { width: 13px; height: 13px; fill: currentColor; }
+/* full-screen PDF viewer */
+.pdfdlg { width: min(1000px, 96vw); height: min(92vh, 1200px); padding: 0; border: 1px solid var(--line); border-radius: 18px; background: var(--deep); color: var(--fg); overflow: hidden; }
+.pdfdlg::backdrop { background: rgba(3, 10, 14, 0.75); backdrop-filter: blur(3px); }
+.pdfdlg .bar2 { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+.pdfdlg .bar2 b { flex: 1; min-width: 0; font-family: var(--display); font-weight: 700; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pdfdlg .bar2 a, .pdfdlg .bar2 button { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 10px; font-family: var(--display); font-weight: 700; font-size: 13px; text-decoration: none; border: 1px solid var(--line); background: var(--tint); color: var(--fg); cursor: pointer; }
+.pdfdlg iframe { width: 100%; height: calc(100% - 56px); border: 0; background: #525659; }
+
 /* lesson marathons vs proposed exam models */
 .ktabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; padding: 6px; margin-bottom: 16px; border-radius: 16px; background: var(--panel); border: 1px solid var(--line); }
 .ktab { display: inline-flex; align-items: center; justify-content: center; gap: 9px; padding: 11px 12px; border: 0; border-radius: 12px; cursor: pointer;
@@ -539,6 +572,9 @@ a.mcard:hover .thumb img { transform: scale(1.04); }
   <main id="app"></main>
 </div>
 <div class="scrim" id="scrim"></div>
+<dialog class="pdfdlg" id="pdfDlg" aria-label="عرض الملف"><div class="bar2"><b id="pdfTitle"></b>
+  <a id="pdfDl" href="#" download>تحميل</a><a id="pdfNew" href="#" target="_blank" rel="noopener">نافذة جديدة ↗</a><button type="button" id="pdfClose">إغلاق ✕</button></div>
+  <iframe id="pdfFrame" title="ملف PDF"></iframe></dialog>
 
 <section class="wrap" id="join">
   <div class="join">
@@ -618,7 +654,10 @@ const DATA = {
         { id: "2am", label: "الثانية متوسط", short: "2م", segments: [], exams: [
           { id: "f1", bib: "ف1", title: "مراجعة الفرض الأول: نموذجان مقترحان مع الحل", thumb: "exam_phys2am_f1.webp", duration: "40:49", youtube: "_3TTDH_7De8",
             topics: ["الفرض الأول", "نموذجان مقترحان", "حل مفصّل"],
-            lessons: [ ["النموذجان المقترحان مع الحل المفصّل", "0:00"] ] } ] } ] },
+            lessons: [ ["النموذجان المقترحان مع الحل المفصّل", "0:00"] ],
+            files: [
+              { kind: "topic", title: "الموضوع الأول: الفرض الأول في الفيزياء", url: "hamiani-2am-f1-model1.pdf", preview: "pdf_hamiani-2am-f1-model1.webp", pages: 2, size: "817 KB" },
+              { kind: "solution", title: "الموضوع الثاني مع الحل النموذجي", url: "hamiani-2am-f1-model2-solution.pdf", preview: "pdf_hamiani-2am-f1-model2.webp", pages: 2, size: "789 KB" } ] } ] } ] },
     { id: "ouargli", name: "الأستاذ أسامة الورقلي", subject: "لغة عربية", photo: "t_ouargli.webp", online: "o_ouargli.webp", years: [],
       social: { youtube: "https://www.youtube.com/@oussamalouergli", facebook: "https://www.facebook.com/oussamalouergli", instagram: "https://www.instagram.com/louerglioussama/" },
       support: { ad: "ad_ouargli.webp", mid: [1, 2, 3, 4], sec: [] } },
@@ -871,7 +910,7 @@ function mlane(t, y, s) {
         <div class="meter"><i style="width:${pct}%"></i></div></div>
       <ol class="mstations">${s.lessons.map(([n, tm], i) => `<li class="${done.has(i) ? "done" : ""}${i === next && done.size ? " next" : ""}">
         <span class="st">${String(i + 1).padStart(2, "0")}</span><span class="nm" title="${esc(n)}">${esc(n)}</span><span class="tm">${tm}</span></li>`).join("")}</ol>
-      <div class="mfoot"><div class="chips">${s.topics.map((x) => `<span class="chip">${esc(x)}</span>`).join("")}</div>
+      <div class="mfoot"><div class="chips">${s.files?.length ? `<span class="chip acc clip">${CLIP}${s.files.length} ملفات PDF</span>` : ""}${s.topics.map((x) => `<span class="chip">${esc(x)}</span>`).join("")}</div>
         <a class="go" href="${href}">${playIcon}${label}</a></div>
     </div></article>`;
 }
@@ -1041,6 +1080,7 @@ function viewMarathon(t, y, s) {
           <span>${done.size} من ${s.lessons.length} · ${pct}%</span>
           <div class="meter"><i style="width:${pct}%"></i></div></div>
       </div>
+      ${filesBlock(s)}
     </div>
     <div>
       <div class="sec" style="margin-top:0"><h2>محطات الماراثون</h2></div>
@@ -1076,6 +1116,33 @@ $("#scrim").addEventListener("click", () => setNav(false));
 $("#side").addEventListener("click", (e) => { if (e.target.closest("a")) setNav(false); });
 addEventListener("keydown", (e) => { if (e.key === "Escape") setNav(false); });
 
+/* attached PDF files: preview, view in a full-screen dialog, download */
+const CLIP = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.5 6.5v10a4.5 4.5 0 0 1-9 0V5a3 3 0 0 1 6 0v10.5a1.5 1.5 0 0 1-3 0V6.5H9v9a3 3 0 0 0 6 0V5a4.5 4.5 0 0 0-9 0v11.5a6 6 0 0 0 12 0v-10z"/></svg>';
+const KIND_NAME = { topic: "موضوع", solution: "موضوع + الحل النموذجي", summary: "ملخص الدروس", exercises: "تمارين" };
+function filesBlock(s) {
+  if (!s.files || !s.files.length) return "";
+  const eye = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5c5 0 9 4.5 10 7-1 2.5-5 7-10 7S3 14.5 2 12c1-2.5 5-7 10-7zm0 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/></svg>';
+  const down = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3h2v9.2l3.3-3.3 1.4 1.4L12 16l-5.7-5.7 1.4-1.4 3.3 3.3zM5 18h14v2H5z"/></svg>';
+  return `<section class="files" aria-label="الملفات المرفقة"><div class="files-h">${CLIP}<b>الملفات المرفقة</b><i>${s.files.length}</i></div><div class="file-list">${s.files.map((f) => `
+    <article class="file" data-kind="${f.kind}">
+      <button class="pv" type="button" data-pdf="${f.url}" data-title="${esc(f.title)}" aria-label="عرض ${esc(f.title)}"><img src="${f.preview}" alt="" loading="lazy"><span class="kind">${KIND_NAME[f.kind] || "ملف"}</span><span class="pdf">PDF</span></button>
+      <div class="fb"><b>${esc(f.title)}</b><small>${f.pages} صفحات · ${esc(f.size)} · جاهز للطباعة</small>
+        <div class="acts"><button class="view" type="button" data-pdf="${f.url}" data-title="${esc(f.title)}">${eye}عرض</button><a class="dl" href="${f.url}" download>${down}تحميل</a></div></div>
+    </article>`).join("")}</div></section>`;
+}
+document.addEventListener("click", (e) => {
+  const b = e.target.closest("[data-pdf]"); if (!b) return;
+  const url = b.dataset.pdf, dlg = document.getElementById("pdfDlg");
+  /* phones open PDFs better in their own viewer */
+  if (matchMedia("(max-width: 700px)").matches || !dlg.showModal) { window.open(url, "_blank", "noopener"); return; }
+  document.getElementById("pdfTitle").textContent = b.dataset.title || "";
+  document.getElementById("pdfDl").href = url; document.getElementById("pdfNew").href = url;
+  document.getElementById("pdfFrame").src = url + "#view=FitH";
+  dlg.showModal();
+});
+document.getElementById("pdfClose").addEventListener("click", () => document.getElementById("pdfDlg").close());
+document.getElementById("pdfDlg").addEventListener("close", () => { document.getElementById("pdfFrame").src = "about:blank"; });
+document.getElementById("pdfDlg").addEventListener("click", (e) => { if (e.target.id === "pdfDlg") e.target.close(); });
 /* ---------- router: #<teacher>, #<teacher>-<year>, #<teacher>-<year>-<segment> ---------- */
 function render() {
   const h = (location.hash || "#home").slice(1);
