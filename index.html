@@ -312,24 +312,25 @@ a.mcard:hover .thumb img { transform: scale(1.04); }
 .files-h svg { width: 22px; height: 22px; fill: var(--acc-text); }
 .files-h b { font-family: var(--display); font-weight: 800; font-size: 18px; }
 .files-h i { font-style: normal; font-size: 12px; padding: 1px 9px; border-radius: 999px; background: var(--tint); color: var(--muted); }
-.file-list { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
-.file { --k: #4c8dff; display: flex; flex-direction: column; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: var(--deep); min-width: 0; }
+/* compact list: one row per file */
+.file-list { display: flex; flex-direction: column; gap: 8px; }
+.file { --k: #4c8dff; display: grid; grid-template-columns: 58px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 8px 10px 8px 8px; border-radius: 14px;
+  border: 1px solid var(--line); border-inline-start: 4px solid var(--k); background: var(--deep); min-width: 0; transition: border-color .2s ease, transform .2s ease; }
+.file:hover { transform: translateX(-2px); border-color: color-mix(in srgb, var(--k) 50%, var(--line)); }
 .file[data-kind="solution"] { --k: #2fbf71; } .file[data-kind="summary"] { --k: #e8b130; } .file[data-kind="exercises"] { --k: #a07cff; }
-.file .pv { position: relative; aspect-ratio: 4 / 3; max-width: 100%; background: #fff; overflow: hidden; cursor: zoom-in; border: 0; padding: 0; display: block; width: 100%; }
-.file .pv img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; transition: transform .3s ease; }
-.file .pv:hover img { transform: scale(1.04); }
-.file .pv::after { content: ""; position: absolute; inset: auto 0 0; height: 40%; background: linear-gradient(0deg, rgba(0, 0, 0, 0.35), transparent); }
-.file .kind { position: absolute; z-index: 1; top: 10px; right: 10px; font-family: var(--display); font-weight: 800; font-size: 12px; color: #fff; background: var(--k); padding: 3px 10px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); }
-.file .pdf { position: absolute; z-index: 1; left: 10px; bottom: 10px; font-family: var(--display); font-weight: 800; font-size: 11px; color: #fff; background: #d93025; padding: 2px 7px; border-radius: 5px; }
-.file .fb { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 8px; border-top: 3px solid var(--k); }
-.file .fb b { font-weight: 600; font-size: 15px; line-height: 1.45; }
-.file .fb small { color: var(--muted); font-size: 12.5px; font-variant-numeric: tabular-nums; }
-.file .acts { display: flex; gap: 8px; }
-.file .acts a, .file .acts button { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 10px; border-radius: 10px; font-family: var(--display); font-weight: 700; font-size: 14px; text-decoration: none; cursor: pointer; border: 0; }
+.file .pv { position: relative; width: 58px; height: 72px; border-radius: 8px; overflow: hidden; background: #fff; cursor: zoom-in; border: 1px solid var(--line); padding: 0; display: block; }
+.file .pv img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+.file .pv .pdf { position: absolute; left: 3px; bottom: 3px; font-family: var(--display); font-weight: 800; font-size: 9px; color: #fff; background: #d93025; padding: 1px 4px; border-radius: 4px; }
+.file .fb { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.file .fb b { font-weight: 600; font-size: 15px; line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.file .fb small { color: var(--muted); font-size: 12.5px; font-variant-numeric: tabular-nums; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.file .kind { font-family: var(--display); font-weight: 800; font-size: 11px; color: #fff; background: var(--k); padding: 1px 8px; border-radius: 6px; }
+.file .acts { display: flex; gap: 6px; }
+.file .acts a, .file .acts button { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 11px; text-decoration: none; cursor: pointer; border: 0; }
 .file .acts .view { background: var(--k); color: #fff; }
 .file .acts .dl { background: var(--tint); color: var(--fg); border: 1px solid var(--line); }
-.file .acts svg { width: 16px; height: 16px; fill: currentColor; }
-.chip.clip { display: inline-flex; align-items: center; gap: 4px; }
+.file .acts svg { width: 18px; height: 18px; fill: currentColor; }
+@media (max-width: 480px) { .file { grid-template-columns: 46px minmax(0, 1fr) auto; gap: 10px; } .file .pv { width: 46px; height: 58px; } .file .fb b { white-space: normal; font-size: 14px; } }.chip.clip { display: inline-flex; align-items: center; gap: 4px; }
 .chip.clip svg { width: 13px; height: 13px; fill: currentColor; }
 /* full-screen PDF viewer */
 .pdfdlg { width: min(1000px, 96vw); height: min(92vh, 1200px); padding: 0; border: 1px solid var(--line); border-radius: 18px; background: var(--deep); color: var(--fg); overflow: hidden; }
@@ -834,7 +835,7 @@ const crumbs = (items) => `<nav class="crumbs" aria-label="المسار">${items
 const miniArch = (t) => `<span class="mini-arch">${t.photo ? `<img src="${t.photo}" alt="">` : `<span class="initials">${esc(short(t)[0])}</span>`}</span>`;
 const panes = "";
 const playIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
-const lessonsWord = (n) => (n >= 3 && n <= 10 ? `${n} دروس` : `${n} درسًا`);
+const lessonsWord = (n) => (n === 1 ? "درس واحد" : n === 2 ? "درسان" : n >= 3 && n <= 10 ? `${n} دروس` : `${n} درسًا`);
 
 const SOCIAL = [
   ["youtube", "يوتيوب", "#e62117", "M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12 31 31 0 0 0 1 16.8a3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8zM9.8 15.1V8.9l5.4 3.1z"],
@@ -1125,9 +1126,9 @@ function filesBlock(s) {
   const down = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 3h2v9.2l3.3-3.3 1.4 1.4L12 16l-5.7-5.7 1.4-1.4 3.3 3.3zM5 18h14v2H5z"/></svg>';
   return `<section class="files" aria-label="الملفات المرفقة"><div class="files-h">${CLIP}<b>الملفات المرفقة</b><i>${s.files.length}</i></div><div class="file-list">${s.files.map((f) => `
     <article class="file" data-kind="${f.kind}">
-      <button class="pv" type="button" data-pdf="${f.url}" data-title="${esc(f.title)}" aria-label="عرض ${esc(f.title)}"><img src="${f.preview}" alt="" loading="lazy"><span class="kind">${KIND_NAME[f.kind] || "ملف"}</span><span class="pdf">PDF</span></button>
-      <div class="fb"><b>${esc(f.title)}</b><small>${f.pages} صفحات · ${esc(f.size)} · جاهز للطباعة</small>
-        <div class="acts"><button class="view" type="button" data-pdf="${f.url}" data-title="${esc(f.title)}">${eye}عرض</button><a class="dl" href="${f.url}" download>${down}تحميل</a></div></div>
+      <button class="pv" type="button" data-pdf="${f.url}" data-title="${esc(f.title)}" aria-label="عرض ${esc(f.title)}"><img src="${f.preview}" alt="" loading="lazy"><span class="pdf">PDF</span></button>
+      <div class="fb"><b title="${esc(f.title)}">${esc(f.title)}</b><small><span class="kind">${KIND_NAME[f.kind] || "ملف"}</span>${f.pages} صفحات · ${esc(f.size)}</small></div>
+      <div class="acts"><button class="view" type="button" data-pdf="${f.url}" data-title="${esc(f.title)}" title="عرض" aria-label="عرض">${eye}</button><a class="dl" href="${f.url}" download title="تحميل" aria-label="تحميل">${down}</a></div>
     </article>`).join("")}</div></section>`;
 }
 document.addEventListener("click", (e) => {
