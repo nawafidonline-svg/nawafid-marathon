@@ -6,6 +6,26 @@
 <meta name="description" content="ماراثون نوافذ: كل دروس المقطع في فيديو واحد مع أساتذة منصة نوافذ، ودروس الدعم عن بعد عبر الزوم.">
 <link rel="icon" href="nw_head.webp">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<script>
+/* GoatCounter: each hash route (#salim, #hamiani-3am-1 …) counts as its own page */
+window.goatcounter = { no_onload: true };
+(function () {
+  var last = null;
+  function path() {
+    var h = decodeURIComponent(location.hash.replace(/^#\/?/, ""));
+    if (!h || /^(stage-|zoom-home|join)/.test(h)) return "/";
+    return "/" + h;
+  }
+  function send() {
+    var p = path(); if (p === last) return;
+    if (!window.goatcounter || !window.goatcounter.count) return setTimeout(send, 400);
+    last = p; window.goatcounter.count({ path: p });
+  }
+  window.addEventListener("hashchange", send);
+  window.addEventListener("load", send);
+})();
+</script>
+<script data-goatcounter="https://nawafid.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </head>
 <body>
 <title>ماراثون نوافذ</title>
