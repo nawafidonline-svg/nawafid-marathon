@@ -19,7 +19,7 @@ window.goatcounter = { no_onload: true };
   function send() {
     var p = path(); if (p === last) return;
     if (!window.goatcounter || !window.goatcounter.count) return setTimeout(send, 400);
-    last = p; window.goatcounter.count({ path: p });
+    last = p; setTimeout(function () { window.goatcounter.count({ path: p, title: document.title }); }, 300);
   }
   window.addEventListener("hashchange", send);
   window.addEventListener("load", send);
