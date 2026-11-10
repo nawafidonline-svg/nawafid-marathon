@@ -140,6 +140,43 @@ img { max-width: 100%; }
 .sico { width: 28px; height: 28px; border-radius: 9px; background: var(--c); display: grid; place-items: center; flex: none; }
 .sico svg { width: 15px; height: 15px; fill: #fff; }
 .scrim { display: none; }
+/* home side menu: teachers grouped by stage */
+.side .brand-h { font-family: var(--display); font-weight: 800; font-size: 17px; padding: 4px 8px 12px; border-bottom: 1px solid var(--line); margin-bottom: 4px; }
+.side .brand-h span { color: var(--gold); }
+.side a.tl { gap: 10px; padding: 6px 8px; }
+.side a.tl .mini-arch { width: 38px; height: 46px; border-radius: 19px 19px 6px 6px; }
+.side a.tl b { display: block; font-weight: 600; font-size: 14.5px; }
+.side a.tl small { display: block; font-size: 12.5px; color: color-mix(in srgb, var(--acc) 72%, var(--fg)); }
+.side .stg { margin-inline-start: auto; font-size: 11px; color: var(--muted); }
+
+/* home: teachers by stage */
+.stg-sec { scroll-margin-top: calc(env(safe-area-inset-top, 0px) + 90px); }
+.stg-chip { font-family: var(--display); font-size: 13px; font-weight: 800; padding: 2px 12px; border-radius: 999px; background: var(--tint); color: var(--muted); white-space: nowrap; }
+.tgrid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); }
+.tcard { position: relative; display: flex; flex-direction: column; text-decoration: none; border-radius: 24px; overflow: hidden;
+  background: var(--panel); border: 1px solid var(--line); transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+.tcard:hover, .tcard:focus-visible { transform: translateY(-4px); border-color: color-mix(in srgb, var(--acc) 60%, transparent);
+  box-shadow: 0 16px 34px -18px color-mix(in srgb, var(--acc) 70%, transparent); }
+.tcard .ph { position: relative; height: 240px; overflow: hidden;
+  background: radial-gradient(150px 150px at 50% 42%, color-mix(in srgb, var(--acc) 55%, transparent), transparent 72%), linear-gradient(170deg, #12394a, #0a2029); }
+.tcard .ph::before { content: ""; position: absolute; inset: 22px 26px 0; border-radius: 999px 999px 0 0; border: 1.5px solid color-mix(in srgb, var(--acc) 55%, transparent); border-bottom: 0; }
+.tcard .ph img { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); height: 100%; max-width: none; object-fit: contain; object-position: bottom; transition: transform .3s ease; }
+.tcard:hover .ph img { transform: translateX(-50%) scale(1.04); }
+.tcard .ph .subj { position: absolute; top: 12px; right: 12px; font-family: var(--display); font-size: 12.5px; font-weight: 800; padding: 3px 11px; border-radius: 999px;
+  background: var(--acc); color: #0a2029; }
+.tcard .bd { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.tcard .bd b { font-family: var(--display); font-size: 18px; font-weight: 800; line-height: 1.35; }
+.tcard .meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 13px; color: var(--muted); }
+.tcard .meta .lv { min-width: 24px; height: 24px; padding: 0 6px; border-radius: 8px; display: inline-grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: 12.5px;
+  background: color-mix(in srgb, var(--acc) 18%, transparent); color: color-mix(in srgb, var(--acc) 72%, var(--fg)); }
+.tcard .tgo { margin-top: auto; display: flex; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px dashed var(--line); font-size: 13.5px; font-weight: 700;
+  color: color-mix(in srgb, var(--acc) 72%, var(--fg)); }
+.tcard .tgo i { font-style: normal; transition: transform .2s ease; }
+.tcard:hover .tgo i { transform: translateX(-4px); }
+.tsoon { display: flex; align-items: center; gap: 16px; padding: 20px 22px; border-radius: 22px; border: 1.5px dashed var(--line-strong); color: var(--muted); }
+.tsoon img { width: 64px; flex: none; }
+.tsoon b { display: block; color: var(--fg); font-family: var(--display); font-size: 17px; }
+@media (max-width: 560px) { .tgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } .tcard .ph { height: 190px; } .tcard .bd { padding: 12px; } .tcard .bd b { font-size: 15.5px; } }
 
 /* ---------- the stage: hero of every page ---------- */
 .stage { position: relative; isolation: isolate; border-radius: 30px; overflow: hidden; border: 1px solid var(--line);
@@ -548,6 +585,11 @@ a.mcard:hover .thumb img { transform: scale(1.04); }
   .sec h2 { font-size: 22px; }
   .sec small { display: none; }
 }
+/* narrow phones: keep the menu button on screen (the logo stays, the wordmark gives way) */
+@media (max-width: 430px) {
+  .brand b { display: none; }
+  .bar-end { gap: 8px; }
+}
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 </style>
 
@@ -646,7 +688,7 @@ const DATA = {
               ["الضرب والقسمة على 10 و100 و1000 و0,1 و0,01 و0,001", "22:10"], ["ترتيب ومقارنة الأعداد العشرية", "34:17"],
               ["ضرب الأعداد العشرية", "50:33"], ["رتبة مقدار مجموع", "58:55"], ["مراجعة شاملة للفرض الأول", "1:06:10"] ] },
           { id: "2", soon: true }, { id: "3", soon: true } ] } ] },
-    { id: "hamiani", name: "الأستاذ حمياني", subject: "فيزياء", photo: "t_hamiani.webp", online: "o_hamiani.webp",
+    { id: "hamiani", hidden: true /* off the home page and menu until the owner says so; his page still opens by link */, name: "الأستاذ حمياني", subject: "فيزياء", photo: "t_hamiani.webp", online: "o_hamiani.webp",
       social: { youtube: "https://www.youtube.com/channel/UCFOxXondQVnfMmgM0E3jpSQ", facebook: "https://www.facebook.com/hamianiphysique",
         instagram: "https://www.instagram.com/hamiani_physique/" },
       support: { mid: [1, 2, 3, 4], sec: [] },
@@ -853,7 +895,19 @@ const store = {
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
 };
 const short = (t) => t.name.replace("الأستاذ ", "");
-const allSegs = () => DATA.teachers.flatMap((t) => t.years.flatMap((y) => y.segments.filter((s) => !s.soon)));
+const shown = () => DATA.teachers.filter((t) => !t.hidden);
+const allSegs = () => shown().flatMap((t) => t.years.flatMap((y) => y.segments.filter((s) => !s.soon)));
+/* school stages: a teacher appears under every stage they teach (support levels or marathon years) */
+const STAGES = [
+  { id: "pri", label: "أساتذة الطور الابتدائي", word: "ابتدائي", sup: "pri", yr: /ap$/ },
+  { id: "mid", label: "أساتذة الطور المتوسط", word: "متوسط", sup: "mid", yr: /am$/ },
+  { id: "sec", label: "أساتذة الطور الثانوي", word: "ثانوي", sup: "sec", yr: /as/ },
+];
+const stageLevels = (t, st) => [...new Set([...((t.support && t.support[st.sup]) || []),
+  ...t.years.filter((y) => st.yr.test(y.id)).map((y) => parseInt(y.id, 10))])].filter(Boolean).sort((a, b) => a - b);
+const inStage = (st) => shown().filter((t) => stageLevels(t, st).length);
+const readyCount = (t) => t.years.reduce((a, y) => a + y.segments.filter((s) => !s.soon).length + (y.exams || []).length, 0);
+const accOf = (t) => (SUBJECTS[t.subject] && SUBJECTS[t.subject].c) || "#f2bf3a";
 const totalH = (segs) => Math.floor(segs.reduce((a, g) => a + secs(g.duration), 0) / 3600);
 const crumbs = (items) => `<nav class="crumbs" aria-label="المسار">${items.map(([l, h], i) =>
   (h ? `<a href="#${h}">${esc(l)}</a>` : `<span>${esc(l)}</span>`) + (i < items.length - 1 ? '<span class="sep">‹</span>' : "")).join("")}</nav>`;
@@ -1009,10 +1063,11 @@ function viewLanding() {
   const pseudo = { name: "ماراثون نوافذ", subject: "", photo: "nw_running.webp" };
   return `
   ${stage(pseudo, `
-    <p class="eyebrow">${panes} منصة نوافذ · التعليم المتوسط</p>
+    <p class="eyebrow">${panes} منصة نوافذ التعليمية · ابتدائي · متوسط · ثانوي</p>
     <h1 class="name">ماراثون <span class="u">نوافذ</span></h1>
     <p class="lede">كلّ دروس المقطع في فيديو واحد. ادخل من رابط أستاذك وتابع المقطع من الدرس الأول حتى الأخير، محطةً بعد محطة.</p>
-    <div class="clock"><div><b>${segs.length}</b><span>ماراثونات جاهزة</span></div><div><b>${totalH(segs)}<em>+</em></b><span>ساعات شرح</span></div><div><b>${DATA.teachers.length}</b><span>أساتذة</span></div></div>`, "")}
+    <div class="clock"><div><b>${segs.length}</b><span>ماراثونات جاهزة</span></div><div><b>${totalH(segs)}<em>+</em></b><span>ساعات شرح</span></div><div><b>${shown().length}</b><span>أساتذة</span></div></div>`, "")}
+  ${teachersByStage()}
   ${bands()}
   <div class="sec"><h2>كيف يعمل الماراثون؟</h2></div>
   <div class="steps">
@@ -1020,6 +1075,26 @@ function viewLanding() {
     <div class="step"><span class="big">02</span><b>اختر سنتك ومقطعك</b><p>كل مقطع ماراثون واحد: دروسه كلها مرتبة في فيديو واحد.</p></div>
     <div class="step"><span class="big">03</span><b>تقدّم محطة بمحطة</b><p>علّم الدروس التي أنهيتها، ونوّاف يدلّك على محطتك التالية.</p></div>
   </div>`;
+}
+
+/* home: every teacher with a photo card, grouped by school stage */
+function teacherCard(t, st) {
+  const n = readyCount(t);
+  return `<a class="tcard" href="#${t.id}" style="--acc:${accOf(t)}" aria-label="${esc(t.name)}، ${esc(t.subject || "")}">
+    <span class="ph"><img src="${t.photo}" alt="" loading="lazy"><span class="subj">${esc(t.subject || "")}</span></span>
+    <span class="bd"><b>${esc(t.name)}</b>
+      <span class="meta">${stageLevels(t, st).map((l) => `<span class="lv">${l}</span>`).join("")}<span>${st.word}</span></span>
+      <span class="tgo">${n ? `${n} ${n === 1 ? "ماراثون جاهز" : n === 2 ? "ماراثونان جاهزان" : "ماراثونات جاهزة"}` : "الماراثونات قريبًا"}<i>←</i></span></span></a>`;
+}
+function teachersByStage() {
+  return STAGES.map((st) => {
+    const list = inStage(st);
+    return `<section class="stg-sec" id="stage-${st.id}" aria-label="${st.label}">
+      <div class="sec"><h2>${st.label}</h2><span class="stg-chip">${list.length ? `${list.length} ${list.length > 2 ? "أساتذة" : list.length === 2 ? "أستاذان" : "أستاذ"}` : "قريبًا"}</span></div>
+      ${list.length ? `<div class="tgrid">${list.map((t) => teacherCard(t, st)).join("")}</div>`
+        : `<div class="tsoon"><img src="nw_running.webp" alt=""><div><b>أساتذة ${st.word} قادمون قريبًا</b>نوّاف يجهّز لكم ماراثونات هذا الطور، تابعونا.</div></div>`}
+    </section>`;
+  }).join("");
 }
 
 function teacherCopy(t, clock, lede) {
@@ -1122,8 +1197,15 @@ function viewMarathon(t, y, s) {
 
 /* ---------- side menu: only the current teacher ---------- */
 function renderSide(h, t) {
-  $(".shell").classList.toggle("solo", !t);
-  if (!t) { $("#side").innerHTML = ""; return; }
+  $(".shell").classList.remove("solo");
+  if (!t) {
+    $("#side").innerHTML = `<div class="brand-h">أساتذة <span>نوافذ</span></div>` + STAGES.map((st) => {
+      const list = inStage(st);
+      return `<h4>${st.label}</h4><ul>${list.length ? list.map((x) => `<li><a class="tl" href="#${x.id}" style="--acc:${accOf(x)}">${miniArch(x)}<span><b>${esc(short(x))}</b><small>${esc(x.subject || "")}</small></span></a></li>`).join("")
+        : `<li><a href="#stage-${st.id}" data-stage="${st.id}"><span class="lvl">…</span>قريبًا<span class="stg">${st.word}</span></a></li>`}</ul>`;
+    }).join("") + `<h4>منصة نوافذ</h4><ul><li><a href="#join"><span class="lvl">+</span>سجّل في نوافذ</a></li></ul>`;
+    return;
+  }
   const on = (id, extra = "") => (h === id ? ` class="on ${extra}" aria-current="page"` : extra ? ` class="${extra}"` : "");
   const years = t.years.map((y) => `<li><a href="#${t.id}-${y.id}"${on(`${t.id}-${y.id}`)}><span class="lvl">${esc(y.short)}</span>${esc(y.label)}</a>
     <ul>${y.segments.map((s, i) => s.soon ? `<li><span class="off sm">المقطع ${ORD[i] || i + 1}<span class="pill">قريبًا</span></span></li>`
@@ -1195,7 +1277,9 @@ function render() {
   }));
 }
 /* #<teacher>-support shows the teacher page and lands on the support section */
-const toSupport = () => { const el = document.getElementById(location.hash.slice(1) + "-sec"); if (location.hash.endsWith("-support") && el) { el.scrollIntoView({ behavior: "smooth" }); return true; } return false; };
+const toSupport = () => {
+  if (location.hash.startsWith("#stage-")) { const st = document.getElementById(location.hash.slice(1)); if (st) { st.scrollIntoView({ behavior: "smooth" }); return true; } }
+  const el = document.getElementById(location.hash.slice(1) + "-sec"); if (location.hash.endsWith("-support") && el) { el.scrollIntoView({ behavior: "smooth" }); return true; } return false; };
 addEventListener("hashchange", () => { render(); if (!toSupport()) scrollTo(0, 0); });
 render(); toSupport();
 /* play the marathon inside the page; a station jumps the same player to its lesson */
