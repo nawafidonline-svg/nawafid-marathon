@@ -624,6 +624,9 @@ a.mcard:hover .thumb img { transform: scale(1.04); }
 .zwin .zbar span { margin-inline-start: auto; display: flex; align-items: center; gap: 6px; font-weight: 700; }
 .zwin .zbar span::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #ff4d4f; animation: zpulse 1.2s ease infinite; }
 .zgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; padding: 6px; }
+.zgrid.g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.zgrid.g4 .ztile.you { grid-column: span 2; aspect-ratio: auto; }
+.zgrid.g4 .ztile.you img { width: 30%; }
 .ztile { position: relative; aspect-ratio: 4 / 3.4; border-radius: 10px; overflow: hidden; border: 2px solid transparent;
   background: radial-gradient(80% 70% at 50% 35%, color-mix(in srgb, var(--c) 45%, transparent), transparent 75%), #18323c; }
 .ztile.talk { border-color: #2fd36b; }
@@ -769,7 +772,7 @@ const DATA = {
               ["الضرب والقسمة على 10 و100 و1000 و0,1 و0,01 و0,001", "22:10"], ["ترتيب ومقارنة الأعداد العشرية", "34:17"],
               ["ضرب الأعداد العشرية", "50:33"], ["رتبة مقدار مجموع", "58:55"], ["مراجعة شاملة للفرض الأول", "1:06:10"] ] },
           { id: "2", soon: true }, { id: "3", soon: true } ] } ] },
-    { id: "hamiani", hidden: true /* off the home page and menu until the owner says so; his page still opens by link */, name: "الأستاذ حمياني", subject: "فيزياء", photo: "t_hamiani.webp", online: "o_hamiani.webp",
+    { id: "hamiani", name: "الأستاذ حمياني", subject: "فيزياء", photo: "t_hamiani.webp", online: "o_hamiani.webp",
       social: { youtube: "https://www.youtube.com/channel/UCFOxXondQVnfMmgM0E3jpSQ", facebook: "https://www.facebook.com/hamianiphysique",
         instagram: "https://www.instagram.com/hamiani_physique/" },
       support: { mid: [1, 2, 3, 4], sec: [] },
@@ -1188,7 +1191,7 @@ function zoomAd() {
   const hasSec = list.some((t) => t.support.sec && t.support.sec.length);
   const msg = "السلام عليكم، أريد التسجيل في دروس الدعم عن بعد عبر الزوم مع أساتذة نوافذ.";
   const ico = (d) => `<b><svg viewBox="0 0 24 24" aria-hidden="true"><path d="${d}"/></svg></b>`;
-  const tiles = list.slice(0, 5).map((t, i) => `<div class="ztile${i === 0 ? " talk" : ""}" style="--c:${accOf(t)}"><img src="${t.online || t.photo}" alt="" loading="lazy"><span class="nm">${esc(short(t))}</span></div>`).join("");
+  const tiles = list.map((t, i) => `<div class="ztile${i === 0 ? " talk" : ""}" style="--c:${accOf(t)}"><img src="${t.online || t.photo}" alt="" loading="lazy"><span class="nm">${esc(short(t))}</span></div>`).join("");
   return `<section class="zad" id="zoom-home" aria-label="التسجيل في دروس الدعم عبر الزوم">
     <div>
       <span class="zoom-tag"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm14 3 4-3v10l-4-3z"/></svg></i>دروس الدعم عن بعد عبر الزوم</span>
@@ -1202,7 +1205,7 @@ function zoomAd() {
     </div>
     <div class="zwin" aria-hidden="true">
       <div class="zbar"><i></i><i></i><i></i>Nawafid · Zoom<span>LIVE</span></div>
-      <div class="zgrid">${tiles}<div class="ztile you"><img src="nw_head.webp" alt=""><span class="nm">أنت هنا؟</span></div></div>
+      <div class="zgrid${list.length > 5 ? " g4" : ""}">${tiles}<div class="ztile you"><img src="nw_head.webp" alt=""><span class="nm">أنت هنا؟</span></div></div>
       <div class="ztools">${ico("M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z")}${ico("M3 7a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm14 3 4-3v10l-4-3z")}${ico("M4 4h16v12H5.2L4 17.2zM2 2v20l4-4h16V2z")}<b class="end">إنهاء</b></div>
     </div>
   </section>`;
