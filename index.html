@@ -585,6 +585,26 @@ a.mcard:hover .thumb img { transform: scale(1.04); }
   .sec h2 { font-size: 22px; }
   .sec small { display: none; }
 }
+/* Nawafid anthem: floating sound button, bottom-left */
+.anthem { position: fixed; z-index: 12; left: max(16px, env(safe-area-inset-left, 0px)); bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+  display: flex; align-items: center; gap: 10px; padding: 6px 14px 6px 6px; border-radius: 999px; cursor: pointer;
+  background: color-mix(in srgb, var(--panel) 92%, transparent); backdrop-filter: blur(10px); border: 1px solid var(--line-strong); color: var(--fg);
+  font-family: var(--display); font-size: 13.5px; font-weight: 700; box-shadow: 0 10px 26px -12px rgba(0, 0, 0, .55); transition: transform .2s ease; }
+.anthem:hover { transform: translateY(-2px); }
+.anthem .disc { width: 38px; height: 38px; border-radius: 50%; flex: none; display: grid; place-items: center; background: var(--gold); }
+.anthem .disc img { width: 30px; height: 30px; object-fit: contain; }
+.anthem.on .disc { animation: anthemBob 1.1s ease-in-out infinite; }
+@keyframes anthemBob { 50% { transform: translateY(-2px) rotate(-6deg); } }
+.anthem .eq { display: flex; align-items: flex-end; gap: 2px; height: 16px; }
+.anthem .eq i { width: 3px; height: 4px; border-radius: 2px; background: var(--gold); }
+.anthem.on .eq i { animation: anthemEq .9s ease-in-out infinite; }
+.anthem.on .eq i:nth-child(2) { animation-delay: -.3s; } .anthem.on .eq i:nth-child(3) { animation-delay: -.6s; } .anthem.on .eq i:nth-child(4) { animation-delay: -.15s; }
+@keyframes anthemEq { 0%, 100% { height: 4px; } 50% { height: 16px; } }
+.anthem .lbl small { display: block; font-size: 11px; font-weight: 500; color: var(--muted); }
+.anthem .ico { width: 18px; height: 18px; fill: currentColor; opacity: .8; }
+@media (max-width: 560px) { .anthem .lbl { display: none; } .anthem { padding: 5px 10px 5px 5px; gap: 8px; } }
+body.nav-open .anthem { display: none; }
+
 /* narrow phones: keep the menu button on screen (the logo stays, the wordmark gives way) */
 @media (max-width: 430px) {
   .brand b { display: none; }
@@ -609,6 +629,13 @@ a.mcard:hover .thumb img { transform: scale(1.04); }
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg></button>
   </div>
 </header>
+
+<button class="anthem" id="anthemBtn" type="button" aria-pressed="false" aria-label="تشغيل أنشودة نوافذ">
+  <span class="disc"><img src="nw_head.webp" alt=""></span>
+  <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+  <span class="lbl">أنشودة نوافذ<small id="anthemState">اضغط للاستماع</small></span>
+  <svg class="ico" id="anthemIco" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+</button>
 
 <div class="shell wrap">
   <aside class="side" id="side" aria-label="قائمة الأستاذ"></aside>
@@ -1282,6 +1309,37 @@ const toSupport = () => {
   const el = document.getElementById(location.hash.slice(1) + "-sec"); if (location.hash.endsWith("-support") && el) { el.scrollIntoView({ behavior: "smooth" }); return true; } return false; };
 addEventListener("hashchange", () => { render(); if (!toSupport()) scrollTo(0, 0); });
 render(); toSupport();
+
+/* Nawafid anthem: starts when a visitor arrives. Browsers block sound until the first tap or key press,
+   so if autoplay is refused it starts on that first interaction. A visitor who stops it is remembered. */
+(() => {
+  const btn = document.getElementById("anthemBtn"), stateEl = document.getElementById("anthemState"), ico = document.getElementById("anthemIco");
+  const audio = new Audio("nawafid_anthem.mp3");
+  audio.preload = "auto"; audio.volume = 0.6;
+  const PLAY = '<path d="M8 5v14l11-7z"/>', PAUSE = '<path d="M7 5h4v14H7zm6 0h4v14h-4z"/>';
+  const pref = () => { try { return localStorage.getItem("nw-anthem"); } catch { return null; } };
+  const setPref = (v) => { try { localStorage.setItem("nw-anthem", v); } catch {} };
+  const paint = () => {
+    const on = !audio.paused;
+    btn.classList.toggle("on", on); btn.setAttribute("aria-pressed", String(on));
+    btn.setAttribute("aria-label", on ? "إيقاف أنشودة نوافذ" : "تشغيل أنشودة نوافذ");
+    stateEl.textContent = on ? "تُعزف الآن" : audio.ended || audio.currentTime > 0 ? "اضغط لإعادة الاستماع" : "اضغط للاستماع";
+    ico.innerHTML = on ? PAUSE : PLAY;
+  };
+  ["play", "pause", "ended"].forEach((ev) => audio.addEventListener(ev, paint));
+  const play = () => audio.play().then(() => { disarm(); return true; }).catch(() => false);
+  const onFirst = (e) => { if (e.target.closest && e.target.closest("#anthemBtn, [data-seek], #ytPlayer, .yt-out")) { disarm(); return; } play(); };
+  const EVENTS = ["pointerdown", "keydown", "touchend"];
+  const disarm = () => EVENTS.forEach((ev) => removeEventListener(ev, onFirst, true));
+  btn.addEventListener("click", () => {
+    disarm();
+    if (audio.paused) { if (audio.ended) audio.currentTime = 0; setPref("on"); play(); } else { setPref("off"); audio.pause(); }
+  });
+  /* a lesson video takes over: stop the anthem when a marathon video starts */
+  document.addEventListener("click", (e) => { if (e.target.closest("[data-seek], #ytPlayer, .yt-out")) audio.pause(); }, true);
+  paint();
+  if (pref() !== "off") play().then((ok) => { if (!ok) EVENTS.forEach((ev) => addEventListener(ev, onFirst, true)); });
+})();
 /* play the marathon inside the page; a station jumps the same player to its lesson */
 document.addEventListener("click", (e) => {
   const b = e.target.closest("[data-seek]"); if (!b) return;
