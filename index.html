@@ -586,6 +586,59 @@ a.mcard:hover .thumb img { transform: scale(1.04); }
   .sec h2 { font-size: 22px; }
   .sec small { display: none; }
 }
+/* home: Zoom registration ad (a mock Zoom gallery of the teachers + contact) */
+.zad { --deep: #0a2029; --panel: #0e2a34; --line: rgba(170, 230, 225, 0.13); --fg: #eef7f5; --muted: #a3c0be; --tint: rgba(255, 255, 255, 0.06); --sunk: rgba(0, 0, 0, 0.22);
+  color: var(--fg); position: relative; isolation: isolate; overflow: hidden; margin-top: 48px; border-radius: 30px; border: 1px solid rgba(45, 140, 255, .35);
+  display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 34px; align-items: center; padding: 34px;
+  background: radial-gradient(520px 340px at 100% 0%, rgba(45, 140, 255, .22), transparent 70%), radial-gradient(420px 300px at 0% 100%, rgba(242, 191, 58, .14), transparent 70%),
+    linear-gradient(160deg, #0d2c37, #0a2029 60%, #081920); }
+.zad::before { content: ""; position: absolute; inset: 0; z-index: -1; opacity: .5;
+  background-image: linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px); background-size: 34px 34px; }
+.zad h2 { font-size: clamp(26px, 3.4vw, 40px); font-weight: 900; line-height: 1.25; margin-top: 14px; }
+.zad h2 em { font-style: normal; color: #5aa9ff; }
+.zad .season { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; font-family: var(--display); font-weight: 700; font-size: 14px; color: var(--gold);
+  padding: 4px 12px; border-radius: 999px; background: rgba(242, 191, 58, .12); border: 1px solid rgba(242, 191, 58, .35); }
+.zad .season::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--gold); animation: zpulse 1.6s ease infinite; }
+@keyframes zpulse { 50% { opacity: .3; } }
+.zad .lead { margin: 14px 0 0; font-size: 17px; line-height: 1.8; color: #d6e7e5; }
+.zad .lead b { color: #fff; }
+.zad .subs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+.zad .subs span { font-family: var(--display); font-size: 13px; font-weight: 700; padding: 3px 11px; border-radius: 999px; background: color-mix(in srgb, var(--c) 18%, transparent);
+  color: color-mix(in srgb, var(--c) 80%, #fff); border: 1px solid color-mix(in srgb, var(--c) 40%, transparent); }
+.zad .lvls { margin-top: 10px; color: var(--muted); font-size: 14px; }
+.zad .lvls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.zad .zg { display: inline-flex; align-items: center; gap: 5px; }
+.zad .lvls b { color: var(--fg); }
+.zad .zl { min-width: 26px; height: 26px; border-radius: 8px; display: inline-grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: 13px;
+  background: rgba(90, 169, 255, .16); color: #9ccaff; border: 1px solid rgba(90, 169, 255, .35); }
+.zad .zl.s2 { background: rgba(242, 191, 58, .14); color: var(--gold); border-color: rgba(242, 191, 58, .4); }
+.zad { scroll-margin-top: calc(env(safe-area-inset-top, 0px) + 90px); }
+.zad .call { margin-top: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 460px; }
+.zad .call .wa-big { justify-content: center; padding: 13px 14px; font-size: 16px; }
+.zad .num { margin-top: 12px; font-size: 14px; color: var(--muted); }
+.zad .num b { font-family: var(--display); font-size: 20px; color: #fff; direction: ltr; display: inline-block; letter-spacing: .5px; margin-inline-start: 6px; }
+/* the mock Zoom window */
+.zwin { position: relative; border-radius: 20px; overflow: hidden; background: #111a1f; border: 1px solid rgba(255, 255, 255, .1); box-shadow: 0 30px 60px -20px rgba(0, 0, 0, .7); transform: rotate(-1.2deg); }
+.zwin .zbar { display: flex; align-items: center; gap: 8px; padding: 9px 12px; background: #1a252b; font-size: 12.5px; color: #c9d6d4; direction: ltr; }
+.zwin .zbar i { width: 10px; height: 10px; border-radius: 50%; background: #ff5f57; } .zwin .zbar i:nth-child(2) { background: #febc2e; } .zwin .zbar i:nth-child(3) { background: #28c840; }
+.zwin .zbar span { margin-inline-start: auto; display: flex; align-items: center; gap: 6px; font-weight: 700; }
+.zwin .zbar span::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #ff4d4f; animation: zpulse 1.2s ease infinite; }
+.zgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; padding: 6px; }
+.ztile { position: relative; aspect-ratio: 4 / 3.4; border-radius: 10px; overflow: hidden; border: 2px solid transparent;
+  background: radial-gradient(80% 70% at 50% 35%, color-mix(in srgb, var(--c) 45%, transparent), transparent 75%), #18323c; }
+.ztile.talk { border-color: #2fd36b; }
+.ztile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 12%; }
+.ztile .nm { position: absolute; bottom: 5px; right: 5px; max-width: calc(100% - 10px); font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 5px; background: rgba(0, 0, 0, .6); color: #fff;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ztile.you { display: grid; place-items: center; background: radial-gradient(70% 60% at 50% 40%, rgba(242, 191, 58, .35), transparent 75%), #18323c; }
+.ztile.you img { position: static; width: 58%; height: auto; object-fit: contain; animation: anthemBob 1.6s ease-in-out infinite; }
+.zwin .ztools { display: flex; justify-content: center; gap: 8px; padding: 9px; background: #1a252b; }
+.zwin .ztools b { width: 30px; height: 30px; border-radius: 9px; background: #2a363c; display: grid; place-items: center; }
+.zwin .ztools b svg { width: 15px; height: 15px; fill: #dfe8e6; }
+.zwin .ztools b.end { width: 54px; background: #e5484d; font-size: 11px; color: #fff; font-weight: 700; }
+@media (max-width: 900px) { .zad { grid-template-columns: minmax(0, 1fr); padding: 24px 18px; gap: 24px; } .zwin { transform: none; } .zad .call { max-width: none; } }
+@media (max-width: 420px) { .zad .call { grid-template-columns: minmax(0, 1fr); } .zad .lead { font-size: 16px; } }
+
 /* Nawafid anthem: floating sound button, bottom-left */
 .anthem { position: fixed; z-index: 12; left: max(16px, env(safe-area-inset-left, 0px)); bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
   display: flex; align-items: center; gap: 10px; padding: 6px 14px 6px 6px; border-radius: 999px; cursor: pointer;
@@ -1098,6 +1151,7 @@ function viewLanding() {
     <p class="lede">كلّ دروس المقطع في فيديو واحد. ادخل من رابط أستاذك وتابع المقطع من الدرس الأول حتى الأخير، محطةً بعد محطة.</p>
     <div class="clock"><div><b>${segs.length}</b><span>ماراثونات جاهزة</span></div><div><b>${totalH(segs)}<em>+</em></b><span>ساعات شرح</span></div><div><b>${shown().length}</b><span>أساتذة</span></div></div>`, "")}
   ${teachersByStage()}
+  ${zoomAd()}
   ${bands()}
   <div class="sec"><h2>كيف يعمل الماراثون؟</h2></div>
   <div class="steps">
@@ -1125,6 +1179,33 @@ function teachersByStage() {
         : `<div class="tsoon"><img src="nw_running.webp" alt=""><div><b>أساتذة ${st.word} قادمون قريبًا</b>نوّاف يجهّز لكم ماراثونات هذا الطور، تابعونا.</div></div>`}
     </section>`;
   }).join("");
+}
+
+/* home: Zoom registration ad with a mock Zoom gallery of the teachers */
+function zoomAd() {
+  const list = shown().filter((t) => t.support);
+  const subjects = [...new Set(list.map((t) => t.subject))];
+  const hasSec = list.some((t) => t.support.sec && t.support.sec.length);
+  const msg = "السلام عليكم، أريد التسجيل في دروس الدعم عن بعد عبر الزوم مع أساتذة نوافذ.";
+  const ico = (d) => `<b><svg viewBox="0 0 24 24" aria-hidden="true"><path d="${d}"/></svg></b>`;
+  const tiles = list.slice(0, 5).map((t, i) => `<div class="ztile${i === 0 ? " talk" : ""}" style="--c:${accOf(t)}"><img src="${t.online || t.photo}" alt="" loading="lazy"><span class="nm">${esc(short(t))}</span></div>`).join("");
+  return `<section class="zad" id="zoom-home" aria-label="التسجيل في دروس الدعم عبر الزوم">
+    <div>
+      <span class="zoom-tag"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm14 3 4-3v10l-4-3z"/></svg></i>دروس الدعم عن بعد عبر الزوم</span>
+      <h2>ادرس مع أساتذة نوافذ <em>مباشرة عبر الزوم</em></h2>
+      <span class="season">التسجيلات للفصل الثاني تنطلق قريبًا</span>
+      <p class="lead">من يريد التسجيل مع <b>أساتذة نوافذ</b> يرجى التواصل معنا عبر <b>الواتساب</b> أو <b>التلغرام</b>، ونرسل لك المستويات والمواعيد.</p>
+      <div class="subs">${subjects.map((s) => `<span style="--c:${(SUBJECTS[s] && SUBJECTS[s].c) || "#f2bf3a"}">${esc(s)}</span>`).join("")}</div>
+      <p class="lvls"><span>المستويات:</span><span class="zg">${[1, 2, 3, 4].map((n) => `<span class="zl">${n}</span>`).join("")}<b>متوسط</b></span>${hasSec ? `<span class="zg"><span class="zl s2">1</span><b>ثانوي</b></span>` : ""}</p>
+      <div class="call">${waBig(msg, "سجّل عبر واتساب")}${tgBig("سجّل عبر تيليجرام")}</div>
+      <p class="num">واتساب وتيليجرام: <b>0558 55 88 32</b></p>
+    </div>
+    <div class="zwin" aria-hidden="true">
+      <div class="zbar"><i></i><i></i><i></i>Nawafid · Zoom<span>LIVE</span></div>
+      <div class="zgrid">${tiles}<div class="ztile you"><img src="nw_head.webp" alt=""><span class="nm">أنت هنا؟</span></div></div>
+      <div class="ztools">${ico("M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1A7 7 0 0 0 19 11z")}${ico("M3 7a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm14 3 4-3v10l-4-3z")}${ico("M4 4h16v12H5.2L4 17.2zM2 2v20l4-4h16V2z")}<b class="end">إنهاء</b></div>
+    </div>
+  </section>`;
 }
 
 function teacherCopy(t, clock, lede) {
@@ -1233,7 +1314,8 @@ function renderSide(h, t) {
       const list = inStage(st);
       return `<h4>${st.label}</h4><ul>${list.length ? list.map((x) => `<li><a class="tl" href="#${x.id}" style="--acc:${accOf(x)}">${miniArch(x)}<span><b>${esc(short(x))}</b><small>${esc(x.subject || "")}</small></span></a></li>`).join("")
         : `<li><a href="#stage-${st.id}" data-stage="${st.id}"><span class="lvl">…</span>قريبًا<span class="stg">${st.word}</span></a></li>`}</ul>`;
-    }).join("") + `<h4>منصة نوافذ</h4><ul><li><a href="#join"><span class="lvl">+</span>سجّل في نوافذ</a></li></ul>`;
+    }).join("") + `<h4>دروس الدعم عن بعد</h4><ul><li><a href="#zoom-home"><span class="lvl">زوم</span>التسجيل عبر الزوم</a></li></ul>
+      <h4>منصة نوافذ</h4><ul><li><a href="#join"><span class="lvl">+</span>سجّل في نوافذ</a></li></ul>`;
     return;
   }
   const on = (id, extra = "") => (h === id ? ` class="on ${extra}" aria-current="page"` : extra ? ` class="${extra}"` : "");
@@ -1308,7 +1390,7 @@ function render() {
 }
 /* #<teacher>-support shows the teacher page and lands on the support section */
 const toSupport = () => {
-  if (location.hash.startsWith("#stage-")) { const st = document.getElementById(location.hash.slice(1)); if (st) { st.scrollIntoView({ behavior: "smooth" }); return true; } }
+  if (location.hash.startsWith("#stage-") || location.hash === "#zoom-home") { const st = document.getElementById(location.hash.slice(1)); if (st) { st.scrollIntoView({ behavior: "smooth" }); return true; } }
   const el = document.getElementById(location.hash.slice(1) + "-sec"); if (location.hash.endsWith("-support") && el) { el.scrollIntoView({ behavior: "smooth" }); return true; } return false; };
 addEventListener("hashchange", () => { render(); if (!toSupport()) scrollTo(0, 0); });
 render(); toSupport();
