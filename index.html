@@ -162,8 +162,9 @@ img { max-width: 100%; }
 .tcard .ph::before { content: ""; position: absolute; inset: 22px 26px 0; border-radius: 999px 999px 0 0; border: 1.5px solid color-mix(in srgb, var(--acc) 55%, transparent); border-bottom: 0; }
 .tcard .ph img { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); height: 100%; max-width: none; object-fit: contain; object-position: bottom; transition: transform .3s ease; }
 .tcard:hover .ph img { transform: translateX(-50%) scale(1.04); }
-.tcard .ph .subj { position: absolute; top: 12px; right: 12px; font-family: var(--display); font-size: 12.5px; font-weight: 800; padding: 3px 11px; border-radius: 999px;
-  background: var(--acc); color: #0a2029; }
+.tcard .subj { align-self: flex-start; margin-top: -26px; position: relative; font-family: var(--display); font-size: 12.5px; font-weight: 800; padding: 3px 12px; border-radius: 999px;
+  background: var(--acc); color: #0a2029; box-shadow: 0 4px 12px -4px rgba(0, 0, 0, .5); }
+.tcard .meta .lv.alt { background: transparent; border: 1.5px solid color-mix(in srgb, var(--acc) 55%, transparent); }
 .tcard .bd { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
 .tcard .bd b { font-family: var(--display); font-size: 18px; font-weight: 800; line-height: 1.35; }
 .tcard .meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 13px; color: var(--muted); }
@@ -932,7 +933,9 @@ const STAGES = [
 ];
 const stageLevels = (t, st) => [...new Set([...((t.support && t.support[st.sup]) || []),
   ...t.years.filter((y) => st.yr.test(y.id)).map((y) => parseInt(y.id, 10))])].filter(Boolean).sort((a, b) => a - b);
-const inStage = (st) => shown().filter((t) => stageLevels(t, st).length);
+/* each teacher is listed once, under their main stage (the lowest stage they teach); other levels show on the card */
+const mainStage = (t) => STAGES.find((st) => stageLevels(t, st).length);
+const inStage = (st) => shown().filter((t) => mainStage(t) === st);
 const readyCount = (t) => t.years.reduce((a, y) => a + y.segments.filter((s) => !s.soon).length + (y.exams || []).length, 0);
 const accOf = (t) => (SUBJECTS[t.subject] && SUBJECTS[t.subject].c) || "#f2bf3a";
 const totalH = (segs) => Math.floor(segs.reduce((a, g) => a + secs(g.duration), 0) / 3600);
@@ -1108,9 +1111,9 @@ function viewLanding() {
 function teacherCard(t, st) {
   const n = readyCount(t);
   return `<a class="tcard" href="#${t.id}" style="--acc:${accOf(t)}" aria-label="${esc(t.name)}، ${esc(t.subject || "")}">
-    <span class="ph"><img src="${t.photo}" alt="" loading="lazy"><span class="subj">${esc(t.subject || "")}</span></span>
-    <span class="bd"><b>${esc(t.name)}</b>
-      <span class="meta">${stageLevels(t, st).map((l) => `<span class="lv">${l}</span>`).join("")}<span>${st.word}</span></span>
+    <span class="ph"><img src="${t.photo}" alt="" loading="lazy"></span>
+    <span class="bd"><span class="subj">${esc(t.subject || "")}</span><b>${esc(t.name)}</b>
+      ${STAGES.filter((x) => stageLevels(t, x).length).map((x) => `<span class="meta">${stageLevels(t, x).map((l) => `<span class="lv${x.id !== st.id ? " alt" : ""}">${l}</span>`).join("")}<span>${x.word}</span></span>`).join("")}
       <span class="tgo">${n ? `${n} ${n === 1 ? "ماراثون جاهز" : n === 2 ? "ماراثونان جاهزان" : "ماراثونات جاهزة"}` : "الماراثونات قريبًا"}<i>←</i></span></span></a>`;
 }
 function teachersByStage() {
@@ -1314,8 +1317,8 @@ render(); toSupport();
    so if autoplay is refused it starts on that first interaction. A visitor who stops it is remembered. */
 (() => {
   const btn = document.getElementById("anthemBtn"), stateEl = document.getElementById("anthemState"), ico = document.getElementById("anthemIco");
-  const audio = new Audio("nawafid_anthem.mp3");
-  audio.preload = "auto"; audio.volume = 0.6;
+  const audio = new Audio("nawafid_anthem.mp3?v=2");
+  audio.preload = "auto"; audio.volume = 1;
   const PLAY = '<path d="M8 5v14l11-7z"/>', PAUSE = '<path d="M7 5h4v14H7zm6 0h4v14h-4z"/>';
   const pref = () => { try { return localStorage.getItem("nw-anthem"); } catch { return null; } };
   const setPref = (v) => { try { localStorage.setItem("nw-anthem", v); } catch {} };
