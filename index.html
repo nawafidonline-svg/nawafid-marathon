@@ -264,6 +264,56 @@ img { max-width: 100%; }
 .name .u { background: linear-gradient(transparent 72%, color-mix(in srgb, var(--acc) 45%, transparent) 72%, color-mix(in srgb, var(--acc) 45%, transparent) 92%, transparent 92%); padding-inline: 4px; }
 .lede { color: var(--muted); font-size: 18px; max-width: 46ch; margin: 18px 0 0; }
 
+/* ---------- home hero: livelier than the teacher pages ---------- */
+.stage.home { background:
+    radial-gradient(460px 380px at 24% 46%, rgba(242, 191, 58, .30), transparent 70%),
+    radial-gradient(520px 420px at 88% 0%, rgba(38, 198, 190, .22), transparent 70%),
+    radial-gradient(420px 320px at 70% 110%, rgba(242, 191, 58, .12), transparent 70%),
+    linear-gradient(160deg, #0f3440 0%, #0a2029 55%, #071820 100%); }
+.stage.home .eyebrow { padding: 6px 14px; border-radius: 999px; background: rgba(242, 191, 58, .12); border: 1px solid rgba(242, 191, 58, .35); font-size: 13.5px; }
+.stage.home .eyebrow .dot { width: 8px; height: 8px; border-radius: 50%; background: #2fd36b; box-shadow: 0 0 0 0 rgba(47, 211, 107, .7); animation: zpulse 1.8s infinite; }
+.stage.home .name { font-size: clamp(46px, 6.2vw, 86px); line-height: 1.08; text-shadow: 0 6px 30px rgba(0, 0, 0, .35); }
+.stage.home .name .u { display: inline-block; padding: 0; background: linear-gradient(100deg, #ffe189 0%, #f2bf3a 45%, #ff9d2e 100%); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 6px 22px rgba(242, 191, 58, .35)); }
+.stage.home .lede { font-size: 18.5px; }
+.stage.home .lede b { color: #ffd766; font-weight: 700; }
+.hbtns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+.hbtn { appearance: none; border: 0; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; min-height: 52px; padding: 10px 22px; border-radius: 16px;
+  font-family: var(--display); font-weight: 800; font-size: 16.5px; color: #0a2029; background: linear-gradient(180deg, #ffd766, #f2bf3a);
+  box-shadow: 0 14px 30px -10px rgba(242, 191, 58, .65), inset 0 -3px 0 rgba(0, 0, 0, .14); transition: transform .15s ease, box-shadow .15s ease; }
+.hbtn:hover { transform: translateY(-2px); box-shadow: 0 18px 36px -10px rgba(242, 191, 58, .8), inset 0 -3px 0 rgba(0, 0, 0, .14); }
+.hbtn:active { transform: translateY(1px); }
+.hbtn i { font-style: normal; width: 26px; height: 26px; border-radius: 50%; display: inline-grid; place-items: center; background: rgba(10, 32, 41, .16); animation: hbNudge 1.4s ease-in-out infinite; }
+.hbtn em { font-style: normal; font-size: 12.5px; font-weight: 800; padding: 2px 10px; border-radius: 999px; white-space: nowrap; }
+.hbtn .tagf { background: #0a2029; color: #7dffa8; }
+.hbtn .tagp { background: rgba(242, 191, 58, .18); color: #ffd766; border: 1px solid rgba(242, 191, 58, .5); }
+.hbtn.ghost { color: #eef7f5; background: rgba(255, 255, 255, .07); border: 1.5px solid rgba(170, 230, 225, .28); box-shadow: none; font-weight: 700; font-size: 15px; }
+.hbtn.ghost:hover { background: rgba(255, 255, 255, .13); box-shadow: none; }
+.faces { display: flex; align-items: center; gap: 12px; margin-top: 18px; font-size: 14.5px; color: var(--muted); }
+.faces b { color: var(--fg); font-family: var(--display); }
+.fstack { display: inline-flex; padding-inline-start: 10px; }
+.fstack img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; object-position: 50% 12%; border: 2.5px solid #0a2029; margin-inline-start: -10px; background: #164555; }
+.stage.home .clock { margin-top: 20px; background: rgba(255, 255, 255, .05); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); border-color: rgba(170, 230, 225, .2); }
+.stage.home .clock b { color: #ffd766; }
+/* Nawaf runs free of the window frame instead of being cut by it */
+.stage.home .figure { overflow: visible; inset: 0; }
+.stage.home .teacher { height: 98%; animation: heroBob 2.6s ease-in-out infinite; filter: drop-shadow(0 26px 30px rgba(0, 0, 0, .55)) drop-shadow(0 0 40px rgba(242, 191, 58, .22)); }
+.stage.home .pane { background: radial-gradient(circle at 50% 42%, rgba(242, 191, 58, .5), transparent 66%), linear-gradient(180deg, #1a5062, #0b2530); }
+.hchips { position: absolute; inset: 0; pointer-events: none; }
+.hchip { position: absolute; padding: 5px 13px; border-radius: 999px; font-family: var(--display); font-weight: 800; font-size: 13px; white-space: nowrap; color: #0a2029; background: var(--c);
+  box-shadow: 0 10px 22px -8px var(--c), 0 4px 10px rgba(0, 0, 0, .35); animation: chipFloat 4s ease-in-out infinite; }
+.hchip.c0 { top: 8%; right: -2%; } .hchip.c1 { top: 30%; left: -4%; animation-delay: -1.1s; } .hchip.c2 { top: 54%; right: -6%; animation-delay: -2.2s; }
+.hchip.c3 { top: 4%; left: 8%; animation-delay: -.6s; } .hchip.c4 { top: 76%; left: -2%; animation-delay: -3s; }
+@keyframes heroBob { 0%, 100% { transform: translateX(-50%) translateY(0) rotate(-1.5deg); } 50% { transform: translateX(-50%) translateY(-12px) rotate(1.5deg); } }
+@keyframes chipFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+@keyframes hbNudge { 0%, 100% { transform: translateY(-2px); } 50% { transform: translateY(3px); } }
+.stage.home .teacher { max-width: 118%; object-fit: contain; object-position: 50% 100%; }
+.faces span:last-child { white-space: nowrap; }
+@media (max-width: 820px) { .stage.home .window { height: 310px; max-width: 330px; } .stage.home .eyebrow { font-size: 12px; padding: 5px 12px; margin-bottom: 12px; white-space: nowrap; }
+  .stage.home .lede { font-size: 16.5px; margin-top: 12px; } .hbtns { margin-top: 18px; } .fstack img { width: 34px; height: 34px; }
+  .hbtns .hbtn { flex: 1 1 auto; justify-content: center; } .hchip { font-size: 12px; padding: 4px 11px; } .hchip.c0 { right: 2%; } .hchip.c2 { right: 0; } .hchip.c1, .hchip.c4 { left: 0; } }
+@media (prefers-reduced-motion: reduce) { .stage.home .teacher, .hchip, .hbtn i { animation: none; } }
+
 /* race clock */
 .clock { display: inline-grid; grid-auto-flow: column; margin-top: 26px; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: rgba(0, 0, 0, 0.28); }
 .clock div { padding: 10px 22px 12px; display: flex; flex-direction: column; gap: 2px; }
@@ -1084,17 +1134,17 @@ function lane(progressLabel) {
     <img class="runner" src="nw_running.webp" alt="">
     <span class="finish"><span class="flag"></span>${progressLabel}</span></div>`;
 }
-function stage(t, inner, subjectLabel) {
+function stage(t, inner, subjectLabel, home) {
   const sub = SUBJECTS[t.subject] || { g: [] };
   /* a photographed room for the subject when we have one; otherwise the line drawing and floating symbols */
   const scene = sub.bg ? "" : SCENES[t.subject] ? `<div class="scene" aria-hidden="true"><svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet">${SCENES[t.subject]}</svg></div>` : "";
-  return `<section class="stage${sub.bg ? " has-bg" : ""}"${sub.bg ? ` style="--bgimg:url('${sub.bg}')"` : ""}>${scene}${sub.bg ? "" : glyphs(sub.g)}
+  return `<section class="stage${home ? " home" : ""}${sub.bg ? " has-bg" : ""}"${sub.bg ? ` style="--bgimg:url('${sub.bg}')"` : ""}>${scene}${sub.bg ? "" : glyphs(sub.g)}
     <div class="stage-grid">
       <div class="copy">${inner}</div>
       <div class="window">
         <div class="pane"></div>
         ${t.photo ? `<div class="figure${t.photoEdge ? " edge-" + t.photoEdge : ""}"><img class="teacher" src="${t.photo}" alt="${esc(t.name)}"></div>` : `<span class="initials">${esc(short(t)[0])}</span>`}
-        <span class="sill"></span>
+        <span class="sill"></span>${home || ""}
         ${FX[t.subject] ? `<canvas class="fx" data-fx="${esc(t.subject)}" aria-hidden="true"></canvas>` : ""}
         ${subjectLabel ? `<span class="badge-subj">${esc(subjectLabel)}</span>` : ""}
       </div>
@@ -1196,12 +1246,18 @@ document.addEventListener("click", (e) => {
 function viewLanding() {
   const segs = allSegs();
   const pseudo = { name: "ماراثون نوافذ", subject: "", photo: "nw_running.webp" };
+  /* home hero extras: subject chips floating around Nawaf, and the teachers' faces as a welcome */
+  const subs = [...new Set(shown().map((t) => t.subject).filter(Boolean))].slice(0, 5);
+  const chips = `<div class="hchips" aria-hidden="true">${subs.map((s, i) => `<span class="hchip c${i}" style="--c:${(SUBJECTS[s] && SUBJECTS[s].c) || "#f2bf3a"}">${esc(s)}</span>`).join("")}</div>`;
+  const faces = `<div class="faces"><span class="fstack">${shown().slice(0, 6).map((t) => `<img src="${t.online || t.photo}" alt="" loading="lazy">`).join("")}</span><span><b>${shown().length} أساتذة</b> في انتظارك</span></div>`;
   return `
   ${stage(pseudo, `
-    <p class="eyebrow">${panes} منصة نوافذ التعليمية · ابتدائي · متوسط · ثانوي</p>
+    <p class="eyebrow"><span class="dot"></span>منصة نوافذ التعليمية · ابتدائي · متوسط · ثانوي</p>
     <h1 class="name">ماراثون <span class="u">نوافذ</span></h1>
-    <p class="lede">كلّ دروس المقطع في فيديو واحد. ادخل من رابط أستاذك وتابع المقطع من الدرس الأول حتى الأخير، محطةً بعد محطة.</p>
-    <div class="clock"><div><b>${segs.length}</b><span>ماراثونات جاهزة</span></div><div><b>${totalH(segs)}<em>+</em></b><span>ساعات شرح</span></div><div><b>${shown().length}</b><span>أساتذة</span></div></div>`, "")}
+    <p class="lede">كلّ دروس المقطع في <b>فيديو واحد</b>. اختر مستواك وأستاذك، وتابع من الدرس الأول حتى الأخير، محطةً بعد محطة.</p>
+    <div class="hbtns"><button type="button" class="hbtn" data-go="pick">ابدأ الآن: اختر مستواك<em class="tagf">مجانًا</em><i>↓</i></button><a class="hbtn ghost" href="#zoom-home">دروس الزوم المباشرة<em class="tagp">مدفوع</em></a></div>
+    ${faces}
+    <div class="clock"><div><b>${segs.length}</b><span>ماراثونات جاهزة</span></div><div><b>${totalH(segs)}<em>+</em></b><span>ساعات شرح</span></div><div><b>${shown().length}</b><span>أساتذة</span></div></div>`, "", chips)}
   ${viewPicker()}
   ${teachersByStage()}
   ${zoomAd()}
@@ -1499,6 +1555,8 @@ render(); toSupport();
 
 /* picker clicks: re-render only the picker, keep the page where it is */
 document.addEventListener("click", (e) => {
+  const go = e.target.closest("[data-go]");
+  if (go) { const el = document.getElementById(go.dataset.go); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); return; }
   const b = e.target.closest("[data-pst], [data-plv]"); if (!b) return;
   const [cs, cl] = pickState();
   const next = b.dataset.pst ? [b.dataset.pst, b.dataset.pst === cs ? cl : 0] : [cs, +b.dataset.plv];
