@@ -199,6 +199,35 @@ img { max-width: 100%; }
 .tsoon b { display: block; color: var(--fg); font-family: var(--display); font-size: 17px; }
 @media (max-width: 560px) { .tgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } .tcard .ph { height: 190px; } .tcard .bd { padding: 12px; } .tcard .bd b { font-size: 15.5px; } }
 
+/* home: "find your teachers" picker — stage, then year, then that year's teachers */
+.pick { margin-top: 28px; padding: 22px; border-radius: 28px; background: var(--panel); border: 1px solid var(--line);
+  box-shadow: 0 18px 40px -30px rgba(0, 0, 0, .55); scroll-margin-top: calc(env(safe-area-inset-top, 0px) + 90px); }
+.pick h2 { margin: 0 0 4px; font-family: var(--display); font-size: clamp(21px, 3.4vw, 27px); font-weight: 800; }
+.pick h2 em { font-style: normal; color: #f2bf3a; }
+.pick .hint { margin: 0 0 16px; color: var(--muted); font-size: 14.5px; }
+.pick .stp { display: flex; align-items: center; gap: 8px; margin: 14px 0 9px; font-family: var(--display); font-size: 14px; font-weight: 800; color: var(--muted); }
+.pick .stp i { width: 22px; height: 22px; border-radius: 50%; display: inline-grid; place-items: center; font-style: normal; font-size: 12px; background: #f2bf3a; color: #0a2029; }
+.pick .row { display: grid; gap: 10px; }
+.pick .row.st { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.pick .row.lv { grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); gap: 8px; }
+.pbtn.yr b { font-size: 24px; line-height: 1; }
+.pbtn.yr span { font-family: var(--display); font-size: 12.5px; font-weight: 700; }
+.pbtn { appearance: none; cursor: pointer; font: inherit; color: var(--fg); background: var(--tint); border: 1.5px solid var(--line); border-radius: 18px;
+  min-height: 54px; padding: 8px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; transition: border-color .15s ease, background .15s ease, transform .15s ease; }
+.pbtn b { font-family: var(--display); font-size: 17px; font-weight: 800; line-height: 1.2; }
+.pbtn small { font-size: 11.5px; color: var(--muted); }
+.pbtn:hover { border-color: color-mix(in srgb, #f2bf3a 55%, var(--line)); }
+.pbtn:active { transform: scale(.97); }
+.pbtn[aria-pressed="true"] { background: #f2bf3a; border-color: #f2bf3a; color: #0a2029; }
+.pbtn[aria-pressed="true"] small { color: #0a2029; opacity: .75; }
+.pbtn.soon { opacity: .55; }
+.pick .res { margin-top: 18px; }
+.pick .res-h { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; font-family: var(--display); font-weight: 800; font-size: 16px; }
+.pick .res-h span { font-size: 13px; color: var(--muted); }
+.pick .tsoon { border-radius: 18px; }
+.pick .empty { padding: 16px; border-radius: 18px; border: 1.5px dashed var(--line-strong); color: var(--muted); text-align: center; font-size: 14.5px; }
+@media (max-width: 560px) { .pick { padding: 16px; border-radius: 22px; } .pbtn { min-height: 50px; border-radius: 15px; } .pbtn b { font-size: 15.5px; } .pbtn.yr { padding: 8px 4px; } .pbtn.yr b { font-size: 21px; } .pbtn.yr small { font-size: 10.5px; } }
+
 /* ---------- the stage: hero of every page ---------- */
 .stage { position: relative; isolation: isolate; border-radius: 30px; overflow: hidden; border: 1px solid var(--line);
   background:
@@ -1173,6 +1202,7 @@ function viewLanding() {
     <h1 class="name">ماراثون <span class="u">نوافذ</span></h1>
     <p class="lede">كلّ دروس المقطع في فيديو واحد. ادخل من رابط أستاذك وتابع المقطع من الدرس الأول حتى الأخير، محطةً بعد محطة.</p>
     <div class="clock"><div><b>${segs.length}</b><span>ماراثونات جاهزة</span></div><div><b>${totalH(segs)}<em>+</em></b><span>ساعات شرح</span></div><div><b>${shown().length}</b><span>أساتذة</span></div></div>`, "")}
+  ${viewPicker()}
   ${teachersByStage()}
   ${zoomAd()}
   ${bands()}
@@ -1202,6 +1232,55 @@ function teachersByStage() {
         : `<div class="tsoon"><img src="nw_running.webp" alt=""><div><b>أساتذة ${st.word} قادمون قريبًا</b>نوّاف يجهّز لكم ماراثونات هذا الطور، تابعونا.</div></div>`}
     </section>`;
   }).join("");
+}
+
+/* home: "find your teachers" — the student picks a stage, then a year, and sees only the teachers of that year.
+   Each card opens that teacher's own page on that year, so teachers' videos are never mixed. */
+const PICK_YEARS = { pri: 5, mid: 4, sec: 3 };
+const pickState = () => {
+  const v = store.get("nw-pick");
+  const s = STAGES.some((x) => x.id === v[0]) ? v[0] : "";
+  return [s, s && v[1] >= 1 && v[1] <= PICK_YEARS[s] ? v[1] : 0];
+};
+const yearWord = (st, n) => `${n} ${st.word}`;
+const teachersOf = (st, n) => shown().filter((t) => stageLevels(t, st).includes(n));
+function pickCard(t, st, n) {
+  const y = t.years.find((x) => st.yr.test(x.id) && parseInt(x.id, 10) === n);
+  const ready = y ? y.segments.filter((s) => !s.soon).length + (y.exams || []).length : 0;
+  const href = y ? `#${t.id}-${y.id}` : t.support ? `#${t.id}-support` : `#${t.id}`;
+  const line = ready ? `${ready} ${ready === 1 ? "ماراثون جاهز" : ready === 2 ? "ماراثونان جاهزان" : "ماراثونات جاهزة"}`
+    : t.support ? "دروس الدعم عبر الزوم" : "الماراثونات قريبًا";
+  return `<a class="tcard" href="${href}" style="--acc:${accOf(t)}" aria-label="${esc(t.name)}، ${esc(t.subject || "")}، ${yearWord(st, n)}">
+    <span class="ph"><img src="${t.photo}" alt="" loading="lazy"></span>
+    <span class="bd"><span class="subj">${esc(t.subject || "")}</span><b>${esc(t.name)}</b>
+      <span class="tgo">${line}<i>←</i></span></span></a>`;
+}
+function viewPicker() {
+  const [sid, n] = pickState();
+  const st = STAGES.find((x) => x.id === sid);
+  const stBtns = STAGES.map((x) => {
+    const c = shown().filter((t) => stageLevels(t, x).length).length;
+    return `<button type="button" class="pbtn${c ? "" : " soon"}" data-pst="${x.id}" aria-pressed="${x.id === sid}"><b>${x.word}</b><small>${c ? `${c} ${c > 2 ? "أساتذة" : c === 2 ? "أستاذان" : "أستاذ"}` : "قريبًا"}</small></button>`;
+  }).join("");
+  let lv = "", res = "";
+  if (st) {
+    lv = `<div class="stp"><i>2</i>اختر سنتك</div><div class="row lv" style="--n:${PICK_YEARS[st.id]}">${Array.from({ length: PICK_YEARS[st.id] }, (_, i) => i + 1).map((k) => {
+      const c = teachersOf(st, k).length;
+      return `<button type="button" class="pbtn yr${c ? "" : " soon"}" data-plv="${k}" aria-pressed="${k === n}" aria-label="${yearWord(st, k)}"><b>${k}</b><span>${st.word}</span><small>${c ? `${c} ${c > 2 ? "أساتذة" : c === 2 ? "أستاذان" : "أستاذ"}` : "قريبًا"}</small></button>`;
+    }).join("")}</div>`;
+    if (n) {
+      const list = teachersOf(st, n);
+      res = `<div class="res" id="pickRes"><div class="res-h">أساتذة ${yearWord(st, n)}<span>اضغط على أستاذك</span></div>
+        ${list.length ? `<div class="tgrid">${list.map((t) => pickCard(t, st, n)).join("")}</div>`
+          : `<div class="tsoon"><img src="nw_running.webp" alt=""><div><b>أساتذة ${yearWord(st, n)} قادمون قريبًا</b>نوّاف يجهّز لكم ماراثونات هذه السنة، تابعونا.</div></div>`}</div>`;
+    }
+  }
+  return `<section class="pick" id="pick" aria-label="ابحث عن أساتذتك">
+    <h2>ابحث عن <em>أساتذتك</em></h2>
+    <p class="hint">اختر طورك ثم سنتك، وتظهر لك أساتذة مستواك.</p>
+    <div class="stp"><i>1</i>اختر طورك</div><div class="row st">${stBtns}</div>
+    ${lv}${res}
+  </section>`;
 }
 
 /* home: Zoom registration ad with a mock Zoom gallery of the teachers */
@@ -1417,6 +1496,16 @@ const toSupport = () => {
   const el = document.getElementById(location.hash.slice(1) + "-sec"); if (location.hash.endsWith("-support") && el) { el.scrollIntoView({ behavior: "smooth" }); return true; } return false; };
 addEventListener("hashchange", () => { render(); if (!toSupport()) scrollTo(0, 0); });
 render(); toSupport();
+
+/* picker clicks: re-render only the picker, keep the page where it is */
+document.addEventListener("click", (e) => {
+  const b = e.target.closest("[data-pst], [data-plv]"); if (!b) return;
+  const [cs, cl] = pickState();
+  const next = b.dataset.pst ? [b.dataset.pst, b.dataset.pst === cs ? cl : 0] : [cs, +b.dataset.plv];
+  store.set("nw-pick", next);
+  const box = document.getElementById("pick"); if (box) box.outerHTML = viewPicker();
+  if (b.dataset.plv) { const r = document.getElementById("pickRes"); if (r && r.getBoundingClientRect().top > innerHeight * .55) r.scrollIntoView({ behavior: "smooth", block: "start" }); }
+});
 
 /* Nawafid anthem: starts when a visitor arrives. Browsers block sound until the first tap or key press,
    so if autoplay is refused it starts on that first interaction. A visitor who stops it is remembered. */
