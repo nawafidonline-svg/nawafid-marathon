@@ -1655,7 +1655,18 @@ const toSupport = (instant) => {
   const how = { behavior: instant === true ? "auto" : "smooth" };
   if (location.hash.startsWith("#stage-") || location.hash === "#zoom-home") { const st = document.getElementById(location.hash.slice(1)); if (st) { st.scrollIntoView(how); return true; } }
   const el = document.getElementById(location.hash.slice(1) + "-sec"); if (/-(support|tour)$/.test(location.hash) && el) { el.scrollIntoView(how); return true; } return false; };
-addEventListener("hashchange", () => { render(); if (!toSupport()) scrollTo(0, 0); });
+/* the page above a section keeps growing while its photos load, so a jump can stop short of it: check where it landed and finish the jump */
+const sectionOf = () => document.getElementById(location.hash.slice(1) + (/-(support|tour)$/.test(location.hash) ? "-sec" : "")) ;
+const settle = () => [450, 1100, 2000].forEach((ms) => setTimeout(() => {
+  const el = sectionOf(); if (!el || !(/-(support|tour)$/.test(location.hash) || location.hash.startsWith("#stage-") || location.hash === "#zoom-home")) return;
+  const top = el.getBoundingClientRect().top; if (top > 160 || top < -40) toSupport(true);
+}, ms));
+addEventListener("hashchange", () => { render(); if (toSupport()) settle(); else scrollTo(0, 0); });
+/* pressing a section link again when its address is already open (no hashchange fires) still goes to the section */
+document.addEventListener("click", (e) => {
+  const a = e.target.closest('a[href^="#"]'); if (!a || a.dataset.jump || a.getAttribute("href") !== location.hash) return;
+  setTimeout(() => { if (toSupport()) settle(); }, 60);
+});
 render(); toSupport(true);
 /* a direct link to a section: photos above it finish loading after the first jump and push it down, so land on it again, without animation */
 addEventListener("load", () => { toSupport(true); setTimeout(() => toSupport(true), 700); });
