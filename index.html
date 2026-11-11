@@ -789,7 +789,7 @@ body.nav-open .anthem { display: none; }
 <button class="anthem" id="anthemBtn" type="button" aria-pressed="false" aria-label="تشغيل أنشودة نوافذ">
   <span class="disc"><img src="nw_head.webp" alt=""></span>
   <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-  <span class="lbl">أنشودة نوافذ<small id="anthemState">اضغط للاستماع</small></span>
+  <span class="lbl"><span id="anthemName">أنشودة نوافذ</span><small id="anthemState">اضغط للاستماع</small></span>
   <svg class="ico" id="anthemIco" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
 </button>
 
@@ -840,6 +840,7 @@ body.nav-open .anthem { display: none; }
 const DATA = {
   teachers: [
     { id: "salim", name: "الأستاذ سليم مختارة", subject: "رياضيات", photo: "t_salim.webp", online: "o_salim.webp",
+      anthem: { src: "salim_anthem.mp3", name: "أنشودة «أستاذنا سليم»" },
       social: { youtube: "https://www.youtube.com/@salimmokhtara", facebook: "https://www.facebook.com/Salim-Mokhtara-%D8%B3%D9%84%D9%8A%D9%85-%D9%85%D8%AE%D8%AA%D8%A7%D8%B1%D8%A9-1921629687886837/",
         instagram: "https://www.instagram.com/salim_mokhtara/",
         telegram: "https://t.me/salim_mokhtara" },
@@ -1569,15 +1570,20 @@ document.addEventListener("click", (e) => {
    so if autoplay is refused it starts on that first interaction. A visitor who stops it is remembered. */
 (() => {
   const btn = document.getElementById("anthemBtn"), stateEl = document.getElementById("anthemState"), ico = document.getElementById("anthemIco");
-  const audio = new Audio("nawafid_anthem.mp3?v=2");
+  /* the platform anthem everywhere, except on the pages of a teacher who has his own song */
+  const MAIN = { src: "nawafid_anthem.mp3?v=2", name: "أنشودة نوافذ" };
+  const trackFor = () => { const t = DATA.teachers.find((x) => x.id === location.hash.slice(1).split("-")[0]); return t && t.anthem ? t.anthem : MAIN; };
+  let track = trackFor();
+  const audio = new Audio(track.src);
   audio.preload = "auto"; audio.volume = 1;
+  const nameEl = document.getElementById("anthemName"); nameEl.textContent = track.name;
   const PLAY = '<path d="M8 5v14l11-7z"/>', PAUSE = '<path d="M7 5h4v14H7zm6 0h4v14h-4z"/>';
   const pref = () => { try { return localStorage.getItem("nw-anthem"); } catch { return null; } };
   const setPref = (v) => { try { localStorage.setItem("nw-anthem", v); } catch {} };
   const paint = () => {
     const on = !audio.paused;
     btn.classList.toggle("on", on); btn.setAttribute("aria-pressed", String(on));
-    btn.setAttribute("aria-label", on ? "إيقاف أنشودة نوافذ" : "تشغيل أنشودة نوافذ");
+    btn.setAttribute("aria-label", (on ? "إيقاف " : "تشغيل ") + track.name);
     stateEl.textContent = on ? "تُعزف الآن" : audio.ended || audio.currentTime > 0 ? "اضغط لإعادة الاستماع" : "اضغط للاستماع";
     ico.innerHTML = on ? PAUSE : PLAY;
   };
@@ -1592,6 +1598,12 @@ document.addEventListener("click", (e) => {
   });
   /* a lesson video takes over: stop the anthem when a marathon video starts */
   document.addEventListener("click", (e) => { if (e.target.closest("[data-seek], #ytPlayer, .yt-out")) audio.pause(); }, true);
+  /* entering or leaving such a teacher's pages swaps the song; moving between his own pages leaves it playing */
+  addEventListener("hashchange", () => {
+    const next = trackFor(); if (next.src === track.src) return;
+    track = next; audio.pause(); audio.src = track.src; nameEl.textContent = track.name; paint();
+    if (pref() !== "off") play().then((ok) => { if (!ok) EVENTS.forEach((ev) => addEventListener(ev, onFirst, true)); });
+  });
   paint();
   if (pref() !== "off") play().then((ok) => { if (!ok) EVENTS.forEach((ev) => addEventListener(ev, onFirst, true)); });
 })();
