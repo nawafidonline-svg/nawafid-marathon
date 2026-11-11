@@ -314,6 +314,34 @@ img { max-width: 100%; }
   .hbtns .hbtn { flex: 1 1 100%; justify-content: center; white-space: nowrap; font-size: 15px; padding: 10px 12px; gap: 8px; } .hbtns .hbtn.ghost { font-size: 14.5px; } .hbtn em { font-size: 12px; padding: 2px 9px; } .hchip { font-size: 12px; padding: 4px 11px; } .hchip.c0 { right: 2%; } .hchip.c2 { right: 0; } .hchip.c1, .hchip.c4 { left: 0; } }
 @media (prefers-reduced-motion: reduce) { .stage.home .teacher, .hchip, .hbtn i { animation: none; } }
 
+/* ---------- a teacher's in-person sessions (tour): one card per day ---------- */
+.tour { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); }
+.tday { border-radius: 22px; background: var(--panel); border: 1px solid var(--line); overflow: hidden; display: flex; flex-direction: column; }
+.tday header { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: color-mix(in srgb, var(--acc) 14%, transparent); border-bottom: 1px solid var(--line); }
+.tday .dnum { font-family: var(--display); font-weight: 900; font-size: 30px; line-height: 1; color: color-mix(in srgb, var(--acc) 75%, var(--fg)); font-variant-numeric: tabular-nums; }
+.tday .dtxt { display: flex; flex-direction: column; line-height: 1.25; }
+.tday .dtxt b { font-family: var(--display); font-size: 16px; font-weight: 800; }
+.tday .dtxt small { font-size: 12.5px; color: var(--muted); }
+.tflag { margin-inline-start: auto; font-family: var(--display); font-size: 11.5px; font-weight: 800; padding: 3px 10px; border-radius: 999px; background: var(--acc); color: #0a2029; white-space: nowrap; }
+.tflag.done { background: var(--tint); color: var(--muted); }
+.tday.next { border-color: color-mix(in srgb, var(--acc) 70%, transparent); box-shadow: 0 14px 30px -20px var(--acc); }
+.tday.past { opacity: .6; }
+.tday ul { list-style: none; margin: 0; padding: 0; }
+.tday li { padding: 12px 16px; display: flex; flex-direction: column; gap: 4px; }
+.tday li + li { border-top: 1px dashed var(--line); }
+.tday .wil { align-self: flex-start; display: inline-flex; align-items: center; gap: 5px; font-family: var(--display); font-size: 13px; font-weight: 800; padding: 2px 11px 2px 9px; border-radius: 999px;
+  background: color-mix(in srgb, var(--acc) 18%, transparent); color: color-mix(in srgb, var(--acc) 72%, var(--fg)); }
+.tday .wil svg { width: 13px; height: 13px; fill: currentColor; }
+.tday li b { font-family: var(--display); font-size: 16px; font-weight: 800; line-height: 1.4; }
+.tday li small { font-size: 13.5px; color: var(--muted); line-height: 1.55; }
+.tday li .tba { font-style: normal; }
+.tcall { align-self: flex-start; margin-top: 4px; display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 6px 14px; border-radius: 12px; text-decoration: none;
+  font-family: var(--display); font-weight: 800; font-size: 15px; letter-spacing: .3px; color: var(--fg); background: var(--tint); border: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+.tcall svg { width: 16px; height: 16px; fill: color-mix(in srgb, var(--acc) 75%, var(--fg)); }
+.tcall:hover { border-color: color-mix(in srgb, var(--acc) 60%, transparent); }
+.tour-note { margin: 14px 2px 0; font-size: 13.5px; color: var(--muted); }
+.cta-row + .cta-row .hero-cta { margin-top: 8px; }
+
 /* race clock */
 .clock { display: inline-grid; grid-auto-flow: column; margin-top: 26px; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: rgba(0, 0, 0, 0.28); }
 .clock div { padding: 10px 22px 12px; display: flex; flex-direction: column; gap: 2px; }
@@ -918,6 +946,25 @@ const DATA = {
     { id: "faidi", name: "الأستاذ الفايدي", subject: "علوم طبيعية", photo: "t_faidi.webp", online: "o_faidi.webp", years: [],
       social: { youtube: "https://www.youtube.com/channel/UCd4ljTpVJkIS24lUBmyVdIA", facebook: "https://www.facebook.com/prof.elfaidi.science",
         instagram: "https://www.instagram.com/prof.elfaidi.science/" },
+      /* in-person review sessions around the country: [ISO date, label, [[wilaya, school, address, phone], …]]; a wilaya with no school yet shows "to be announced" */
+      tour: { title: "دورات الفصل الأول", sub: "دورات حضورية مع الأستاذ في ولايتك", days: [
+        ["2026-11-28", "السبت 28 نوفمبر", [["درارية", "مينا سكول", "مقابل الجمارك، درارية", "0770385051"], ["باب الزوار", "مدرسة القمة", "مقابل محطة الطرامواي رابية، خلف بنك السلام", "0795448266"]]],
+        ["2026-12-04", "الجمعة 04 ديسمبر", [["المسيلة", "مركز الطفل النموذجي", "حي لاسيتي، مقابل المكتبة المركزية", "0657815858"], ["برج بوعريريج"]]],
+        ["2026-12-19", "السبت 19 ديسمبر", [["الرغاية", "مدرسة القمة"], ["القليعة", "مدرسة المناهل للعلوم", "المنطقة الحضرية الجديدة، تجزئة رقم 37", "0669098726"]]],
+        ["2026-12-20", "الأحد 20 ديسمبر", [["الشلف", "الفكر الرائد", "مقابل متوسطة زياني دلفي (DNC)", "0770198248"]]],
+        ["2026-12-21", "الإثنين 21 ديسمبر", [["وهران"]]],
+        ["2026-12-22", "الثلاثاء 22 ديسمبر", [["البليدة", "أكاديمية الفتح", "Boulevard 20 mètres, en face de l'OPGI", "0557951896"]]],
+        ["2026-12-23", "الأربعاء 23 ديسمبر", [["رويبة"], ["باب الزوار", "نوفا سكول", "المحمدية، بالقرب من تيكنو للأدوات المدرسية", "0776753698"]]],
+        ["2026-12-24", "الخميس 24 ديسمبر", [["بوفاريك"], ["الشراقة", "بصمتي", "الشراقة، أمام محطة الحافلات", "0674479136"]]],
+        ["2026-12-25", "الجمعة 25 ديسمبر", [["أولاد يعيش"], ["القبة"]]],
+        ["2026-12-26", "السبت 26 ديسمبر", [["بومرداس", "مدرسة الأرقم", "الكرمة، بومرداس، مقابل ابتدائية حدهم منور", "0794904556"], ["تيزي وزو", "BLIBEKSCHOOL", "64 rue Khodja Khaled", "0561250500"]]],
+        ["2026-12-27", "الأحد 27 ديسمبر", [["البويرة", "مدرسة ديكارت", "ليكوتاك، بالقرب من ثانوية كريم بلقاسم (1100)", "0792636417"], ["المنصورة"]]],
+        ["2026-12-28", "الإثنين 28 ديسمبر", [["بجاية", "كليك سكول", "Cité Oultache, Sidi Ahmed, Béjaïa", "0557775746"], ["جيجل", "أكاديمية سبل النجاح", "حي بن شعيبون", "0696523454"]]],
+        ["2026-12-29", "الثلاثاء 29 ديسمبر", [["سطيف", "فرانتس فانون", "شارع فرانتس فانون، بجوار مركز الخدمة الوطنية", "0541243348"], ["العلمة", "معهد المجد", "شارع الثورة، مقابل مقهى البلاستيك", "0775272733"]]],
+        ["2026-12-30", "الأربعاء 30 ديسمبر", [["باتنة", "مدرسة إقليدس", "حي السطا، مقابل عمارات فرماجة بوزوران", "0667026707"], ["خنشلة", "مدرسة القدس", "حي 700 مسكن، بجانب صيدلية بلاع", "0699373737"]]],
+        ["2026-12-31", "الخميس 31 ديسمبر", [["سوق أهراس", "عفاف سكول", "بمحاذاة المركز الإسلامي، مطعم هافانا (موبيليس قديمًا)", "0667245324"], ["عنابة", "جيل النجاح", "خلف مستوصف ديدوش مراد، وراء لاكراش لاريروز", "0671989581"]]],
+        ["2027-01-01", "الجمعة 01 جانفي", [["قسنطينة · النوفال", "مدارس العالم", "«Les Zianides» UV05, Ali Mendjeli", "0770443165"], ["قسنطينة · سيدي مبروك", "redx_school", "تحت بنك la CNEP، وراء مستشفى الولادة", "0774044932"]]],
+      ] },
       support: { ad: "ad_faidi.webp", mid: [1, 2, 3, 4], sec: [1] } },
     { id: "sahnoun", name: "الأستاذ جلال سحنون", subject: "لغة فرنسية", photo: "t_sahnoun.webp", online: "o_sahnoun.webp",
       anthem: { src: "sahnoun_anthem.mp3", name: "أنشودة «أستاذنا جلال»" }, years: [],
@@ -1375,6 +1422,7 @@ function teacherCopy(t, clock, lede) {
   return `<p class="eyebrow">${panes} ماراثون نوافذ${t.subject ? " · " + esc(t.subject) : ""}</p>
     <h1 class="name"><small>الأستاذ</small><span class="u">${esc(short(t))}</span></h1>
     <p class="lede">${lede}</p>${clock}
+    ${t.tour ? `<div class="cta-row"><a class="hero-cta" href="#${t.id}-tour">${esc(t.tour.title)} <i>المواعيد والأماكن</i></a></div>` : ""}
     ${t.support ? `<div class="cta-row"><a class="hero-cta" href="#${t.id}-support" data-jump="${t.id}-support-sec">دروس الدعم عن بعد مع الأستاذ <i>تنطلق قريبًا</i></a></div>` : ""}
     ${follow(t)}`;
 }
@@ -1407,6 +1455,28 @@ function supportBlock(t) {
   </section>`;
 }
 
+/* a teacher's in-person sessions, one card per day; past days dim and the next one is flagged */
+function tourBlock(t) {
+  const tr = t.tour; if (!tr) return "";
+  const today = new Date(); const iso = new Date(today.getTime() - today.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  const nextIdx = tr.days.findIndex(([d]) => d >= iso);
+  const fmt = (p) => p.replace(/^(\d{4})(\d{2})(\d{2})(\d{2})$/, "$1 $2 $3 $4");
+  const pin = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>';
+  const tel = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.2 15.2 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>';
+  return `<div class="sec" id="${t.id}-tour-sec"><h2>${esc(tr.title)}</h2><small>${esc(tr.sub || "")}</small></div>
+  <section class="tour" aria-label="${esc(tr.title)}">${tr.days.map(([d, label, stops], i) => {
+    const [dayName, num, month] = label.split(" ");
+    return `<article class="tday${d < iso ? " past" : ""}${i === nextIdx ? " next" : ""}">
+      <header><span class="dnum">${esc(num)}</span><span class="dtxt"><b>${esc(dayName)}</b><small>${esc(month)}</small></span>${i === nextIdx ? '<span class="tflag">الدورة القادمة</span>' : d < iso ? '<span class="tflag done">انتهت</span>' : ""}</header>
+      <ul>${stops.map(([w, school, addr, phone]) => `<li>
+        <span class="wil">${pin}${esc(w)}</span>
+        ${school ? `<b>${esc(school)}</b>${addr ? `<small>${esc(addr)}</small>` : ""}` : `<small class="tba">المكان يُعلن قريبًا</small>`}
+        ${phone ? `<a class="tcall" href="tel:${phone}" aria-label="اتصل بـ ${esc(school)}: ${phone}">${tel}<span dir="ltr">${fmt(phone)}</span></a>` : ""}
+      </li>`).join("")}</ul></article>`;
+  }).join("")}</section>
+  <p class="tour-note">للتسجيل في دورة ولايتك اتصل برقم المؤسسة مباشرة. الأماكن التي لم تُحدَّد بعد تُعلن قريبًا.</p>`;
+}
+
 function viewTeacher(t) {
   const segs = t.years.flatMap((y) => y.segments.filter((s) => !s.soon).map((s) => ({ y, s })));
   if (!segs.length) {
@@ -1414,14 +1484,14 @@ function viewTeacher(t) {
       `ماراثونات ${esc(t.name)} قيد التحضير: كلّ دروس المقطع في فيديو واحد، مرتبةً حسب السنة والمقطع. احفظ هذا الرابط وعُد إليه.`), t.subject) + bands() + `
     <div class="sec"><h2>الماراثونات</h2><small>على خط الانطلاق</small></div>
     <div class="grid"><div class="mcard soon"><div class="thumb"><img src="nw_thinking.webp" alt=""></div>
-      <div class="body"><h3>نوّاف يجهّز أول ماراثون</h3><div class="meta">تابع حسابات الأستاذ ليصلك الجديد أولًا</div></div></div></div>` + supportBlock(t);
+      <div class="body"><h3>نوّاف يجهّز أول ماراثون</h3><div class="meta">تابع حسابات الأستاذ ليصلك الجديد أولًا</div></div></div></div>` + tourBlock(t) + supportBlock(t);
   }
   const hrs = totalH(segs.map(({ s }) => s));
   const clock = `<div class="clock"><div><b>${segs.length}</b><span>${segs.length === 1 ? "ماراثون جاهز" : "ماراثونات جاهزة"}</span></div>
     <div><b>${hrs}<em>+</em></b><span>ساعات شرح</span></div><div><b>${segs.reduce((a, { s }) => a + s.lessons.length, 0)}</b><span>درسًا</span></div></div>`;
   return stage(t, teacherCopy(t, clock, `كلّ دروس المقطع في فيديو واحد. اختر سنتك الدراسية وتابع الماراثون من الدرس الأول حتى خط الوصول.`), t.subject) + bands() +
     `<div class="sec" id="${t.id}-m-sec"><h2>الماراثونات</h2><small>اختر سنتك ثم مقطعك</small></div>
-    <div id="mtrack" data-t="${t.id}">${marathonsBlock(t)}</div>` + supportBlock(t);
+    <div id="mtrack" data-t="${t.id}">${marathonsBlock(t)}</div>` + tourBlock(t) + supportBlock(t);
 }
 
 function viewYear(t, y) {
@@ -1489,6 +1559,7 @@ function renderSide(h, t) {
   const socials = socialList(t).map(([k, n, c, d]) => `<li><a href="${esc(t.social[k])}" target="_blank" rel="noopener">${sico(c, d)}${n}</a></li>`).join("");
   $("#side").innerHTML = `<a class="who" href="#${t.id}"${h === t.id ? ' aria-current="page"' : ""}>${miniArch(t)}<span><b>${esc(t.name)}</b><small>${esc(t.subject || "")}</small></span></a>
     <h4>السنوات والمقاطع</h4><ul>${years || '<li><span class="off"><span class="lvl">…</span>الماراثونات قريبًا</span></li>'}</ul>
+    ${t.tour ? `<h4>${esc(t.tour.title)}</h4><ul><li><a href="#${t.id}-tour"${on(`${t.id}-tour`)}><span class="lvl">${t.tour.days.length}</span>المواعيد والأماكن</a></li></ul>` : ""}
     ${t.support ? `<h4>دروس الدعم عن بعد</h4><ul><li><a href="#${t.id}-support"${on(`${t.id}-support`)}><span class="lvl">زوم</span>المستويات والتسجيل</a></li></ul>` : ""}
     ${socials ? `<h4>تابع الأستاذ</h4><ul>${socials}</ul>` : ""}
     <h4>منصة نوافذ</h4><ul><li><a href="#join"><span class="lvl">+</span>سجّل في نوافذ</a></li></ul>`;
@@ -1554,7 +1625,7 @@ function render() {
 /* #<teacher>-support shows the teacher page and lands on the support section */
 const toSupport = () => {
   if (location.hash.startsWith("#stage-") || location.hash === "#zoom-home") { const st = document.getElementById(location.hash.slice(1)); if (st) { st.scrollIntoView({ behavior: "smooth" }); return true; } }
-  const el = document.getElementById(location.hash.slice(1) + "-sec"); if (location.hash.endsWith("-support") && el) { el.scrollIntoView({ behavior: "smooth" }); return true; } return false; };
+  const el = document.getElementById(location.hash.slice(1) + "-sec"); if (/-(support|tour)$/.test(location.hash) && el) { el.scrollIntoView({ behavior: "smooth" }); return true; } return false; };
 addEventListener("hashchange", () => { render(); if (!toSupport()) scrollTo(0, 0); });
 render(); toSupport();
 
