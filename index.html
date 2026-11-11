@@ -311,7 +311,7 @@ img { max-width: 100%; }
 .faces span:last-child { white-space: nowrap; }
 @media (max-width: 820px) { .stage.home .window { height: 310px; max-width: 330px; } .stage.home .eyebrow { font-size: 12px; padding: 5px 12px; margin-bottom: 12px; white-space: nowrap; }
   .stage.home .lede { font-size: 16.5px; margin-top: 12px; } .hbtns { margin-top: 18px; } .fstack img { width: 34px; height: 34px; }
-  .hbtns .hbtn { flex: 1 1 auto; justify-content: center; } .hchip { font-size: 12px; padding: 4px 11px; } .hchip.c0 { right: 2%; } .hchip.c2 { right: 0; } .hchip.c1, .hchip.c4 { left: 0; } }
+  .hbtns .hbtn { flex: 1 1 100%; justify-content: center; white-space: nowrap; font-size: 15px; padding: 10px 12px; gap: 8px; } .hbtns .hbtn.ghost { font-size: 14.5px; } .hbtn em { font-size: 12px; padding: 2px 9px; } .hchip { font-size: 12px; padding: 4px 11px; } .hchip.c0 { right: 2%; } .hchip.c2 { right: 0; } .hchip.c1, .hchip.c4 { left: 0; } }
 @media (prefers-reduced-motion: reduce) { .stage.home .teacher, .hchip, .hbtn i { animation: none; } }
 
 /* race clock */
@@ -1249,7 +1249,7 @@ function viewLanding() {
   /* home hero extras: subject chips floating around Nawaf, and the teachers' faces as a welcome */
   const subs = [...new Set(shown().map((t) => t.subject).filter(Boolean))].slice(0, 5);
   const chips = `<div class="hchips" aria-hidden="true">${subs.map((s, i) => `<span class="hchip c${i}" style="--c:${(SUBJECTS[s] && SUBJECTS[s].c) || "#f2bf3a"}">${esc(s)}</span>`).join("")}</div>`;
-  const faces = `<div class="faces"><span class="fstack">${shown().slice(0, 6).map((t) => `<img src="${t.online || t.photo}" alt="" loading="lazy">`).join("")}</span><span><b>${shown().length} أساتذة</b> في انتظارك</span></div>`;
+  const faces = `<div class="faces"><span class="fstack">${shown().slice(0, 6).map((t) => `<img src="${t.online || t.photo}" alt="">`).join("")}</span><span><b>${shown().length} أساتذة</b> في انتظارك</span></div>`;
   return `
   ${stage(pseudo, `
     <p class="eyebrow"><span class="dot"></span>منصة نوافذ التعليمية · ابتدائي · متوسط · ثانوي</p>
