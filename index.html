@@ -13,7 +13,7 @@ window.goatcounter = { no_onload: true };
   var last = null;
   function path() {
     var h = decodeURIComponent(location.hash.replace(/^#\/?/, ""));
-    if (!h || /^(stage-|zoom-home|join)/.test(h)) return "/";
+    if (!h || /^(home$|pick$|stage-|zoom-home|join)/.test(h)) return "/";
     return "/" + h;
   }
   function send() {
@@ -343,6 +343,30 @@ img { max-width: 100%; }
 .tcall svg { width: 16px; height: 16px; fill: color-mix(in srgb, var(--acc) 75%, var(--fg)); }
 .tcall:hover { border-color: color-mix(in srgb, var(--acc) 60%, transparent); }
 .tour-note { margin: 14px 2px 0; font-size: 13.5px; color: var(--muted); }
+.tfind { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; padding: 0 16px; min-height: 52px; border-radius: 16px; background: var(--panel); border: 1.5px solid var(--line-strong); }
+.tfind:focus-within { border-color: var(--acc); box-shadow: 0 0 0 3px color-mix(in srgb, var(--acc) 25%, transparent); }
+.tfind svg { width: 20px; height: 20px; flex: none; fill: var(--muted); }
+.tfind input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--fg); font: inherit; font-size: 16px; }
+.tday[hidden], .tday li[hidden], .tnone[hidden] { display: none; }
+.tnone { margin: 0 0 12px; padding: 14px 16px; border-radius: 16px; border: 1.5px dashed var(--line-strong); color: var(--muted); text-align: center; }
+/* home: continue watching */
+.resume { margin-top: 22px; display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 16px; padding: 14px; border-radius: 24px; background: var(--panel);
+  border: 1.5px solid color-mix(in srgb, var(--acc) 55%, var(--line)); box-shadow: 0 16px 34px -24px var(--acc); }
+.resume .rthumb { position: relative; display: block; border-radius: 16px; overflow: hidden; aspect-ratio: 16 / 9; align-self: start; }
+.resume .rthumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.resume .rplay { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(0, 0, 0, .25); color: #fff; }
+.resume .rplay svg { width: 42px; height: 42px; fill: currentColor; }
+.resume .rb { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.resume .rtag { align-self: flex-start; font-family: var(--display); font-size: 12px; font-weight: 800; padding: 2px 11px; border-radius: 999px; background: var(--acc); color: #0a2029; }
+.resume b { font-family: var(--display); font-size: 18px; font-weight: 800; line-height: 1.35; }
+.resume small { color: var(--muted); font-size: 13.5px; }
+.resume .rnext { font-size: 14px; font-weight: 600; }
+.resume .meter { display: block; height: 7px; border-radius: 999px; background: var(--tint); overflow: hidden; margin-top: 2px; }
+.resume .meter i { display: block; height: 100%; border-radius: 999px; background: var(--acc); }
+.resume .ract { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
+.resume .rgo { text-decoration: none; font-family: var(--display); font-weight: 800; font-size: 15px; padding: 8px 18px; border-radius: 12px; background: var(--acc); color: #0a2029; }
+.resume .rx { appearance: none; border: 0; background: none; cursor: pointer; font: inherit; font-size: 13px; color: var(--muted); text-decoration: underline; padding: 6px; }
+@media (max-width: 560px) { .resume { grid-template-columns: 112px minmax(0, 1fr); gap: 12px; padding: 12px; border-radius: 20px; } .resume b { font-size: 15.5px; } .resume .rplay svg { width: 30px; height: 30px; } .resume .rnext { font-size: 13px; } }
 /* the tour's banner: the loudest thing on the teacher's page after the hero */
 .tour-hd { margin: 26px 0 14px; padding: 22px 24px; border-radius: 26px; display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; color: #0a2029;
   background: radial-gradient(300px 200px at 0% 0%, rgba(255, 255, 255, .45), transparent 70%), linear-gradient(120deg, var(--acc), color-mix(in srgb, var(--acc) 62%, #f2bf3a));
@@ -1333,6 +1357,7 @@ function viewLanding() {
     <div class="hbtns"><button type="button" class="hbtn" data-go="pick">ابدأ الآن: اختر مستواك<em class="tagf">مجانًا</em><i>↓</i></button><a class="hbtn ghost" href="#zoom-home">دروس الزوم المباشرة<em class="tagp">مدفوع</em></a></div>
     ${faces}
     <div class="clock"><div><b>${segs.length}</b><span>ماراثونات جاهزة</span></div><div><b>${totalH(segs)}<em>+</em></b><span>ساعات شرح</span></div><div><b>${shown().length}</b><span>أساتذة</span></div></div>`, "", chips)}
+  ${resumeCard()}
   ${viewPicker()}
   ${teachersByStage()}
   ${zoomAd()}
@@ -1478,6 +1503,40 @@ function supportBlock(t) {
   </section>`;
 }
 
+/* search text without the spelling differences people type: hamza forms, ta marbuta, alef maqsura, diacritics, case */
+const plain = (s) => String(s).toLowerCase().replace(/[ً-ْـ]/g, "").replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").replace(/ى/g, "ي").replace(/\s+/g, " ").trim();
+/* the tour search: keep the wilayas that match, hide days left empty */
+document.addEventListener("input", (e) => {
+  if (e.target.id !== "tourQ") return;
+  const q = plain(e.target.value); let shown = 0;
+  document.querySelectorAll(".tour .tday").forEach((d) => {
+    let n = 0; d.querySelectorAll("li").forEach((li) => { const ok = !q || li.dataset.w.includes(q); li.hidden = !ok; if (ok) n++; });
+    d.hidden = !n; shown += n;
+  });
+  const none = document.getElementById("tourNone"); if (none) none.hidden = shown > 0;
+});
+
+/* home: the last marathon this visitor opened, with the station to resume from */
+function resumeCard() {
+  const [ti, yi, si] = store.get("nw-last");
+  const t = shown().find((x) => x.id === ti), y = t && t.years.find((x) => x.id === yi);
+  const s = y && (y.segments.find((x) => x.id === si && !x.soon) || (y.exams || []).find((x) => x.id === si));
+  if (!s) return "";
+  const done = new Set(store.get(`done:${ti}:${yi}:${si}`)), next = s.lessons.findIndex((_, i) => !done.has(i));
+  const pct = Math.round((done.size / s.lessons.length) * 100);
+  return `<section class="resume" id="resume" style="--acc:${accOf(t)}" aria-label="أكمل المشاهدة">
+    <a class="rthumb" href="#${ti}-${yi}-${si}"><img src="${s.thumb}" alt="" loading="lazy"><span class="rplay">${playIcon}</span></a>
+    <div class="rb"><span class="rtag">أكمل المشاهدة</span><b>${esc(s.title)}</b><small>${esc(t.name)} · ${esc(y.label)}</small>
+      <span class="rnext">${next < 0 ? "أنهيت كل المحطات، أحسنت!" : `محطتك التالية: ${esc(s.lessons[next][0])}`}</span>
+      <span class="meter"><i style="width:${pct}%"></i></span>
+      <span class="ract"><a class="rgo" href="#${ti}-${yi}-${si}">${next < 0 ? "أعد المشاهدة" : "أكمل الآن"} ←</a><button type="button" class="rx" data-resume-x>إخفاء</button></span></div>
+  </section>`;
+}
+document.addEventListener("click", (e) => {
+  if (!e.target.closest("[data-resume-x]")) return;
+  store.set("nw-last", []); const r = document.getElementById("resume"); if (r) r.remove();
+});
+
 /* a teacher's in-person sessions, one card per day; past days dim and the next one is flagged */
 function tourBlock(t) {
   const tr = t.tour; if (!tr) return "";
@@ -1491,11 +1550,14 @@ function tourBlock(t) {
   return `<div class="tour-hd" id="${t.id}-tour-sec">
     <div class="tx"><span class="ttag">${pin}دورات حضورية</span><h2>${esc(tr.title)}</h2><p>${esc(tr.sub || "")}</p>
       ${nx ? `<p class="tnext">الدورة القادمة: <b>${esc(nx[1])}</b> · ${nx[2].map((s) => esc(s[0])).join(" و")}</p>` : ""}</div></div>
+  <label class="tfind"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 3a7 7 0 1 0 4.4 12.5l4.6 4.5 1.4-1.4-4.5-4.6A7 7 0 0 0 10 3zm0 2a5 5 0 1 1 0 10 5 5 0 0 1 0-10z"/></svg>
+    <input type="search" id="tourQ" placeholder="ابحث عن ولايتك: سطيف، بجاية، باتنة…" autocomplete="off" aria-label="ابحث عن ولايتك"></label>
+  <p class="tnone" id="tourNone" hidden>لا توجد دورة بهذا الاسم حاليًا. جرّب اسم ولاية أو مدينة أخرى.</p>
   <section class="tour" aria-label="${esc(tr.title)}">${days.map(([d, label, stops], i) => {
     const [dayName, num, month] = label.split(" ");
     return `<article class="tday${d < iso ? " past" : ""}${i === nextIdx ? " next" : ""}">
       <header><span class="dnum">${esc(num)}</span><span class="dtxt"><b>${esc(dayName)}</b><small>${esc(month)}</small></span>${i === nextIdx ? '<span class="tflag">الدورة القادمة</span>' : d < iso ? '<span class="tflag done">انتهت</span>' : ""}</header>
-      <ul>${stops.map(([w, school, addr, phone]) => `<li>
+      <ul>${stops.map(([w, school, addr, phone]) => `<li data-w="${esc(plain([w, school, addr].filter(Boolean).join(" ")))}">
         <span class="wil">${pin}${esc(w)}</span>
         ${school ? `<b>${esc(school)}</b>${addr ? `<small>${esc(addr)}</small>` : ""}` : `<small class="tba">المكان يُعلن قريبًا</small>`}
         ${phone ? `<a class="tcall" href="tel:${phone}" aria-label="اتصل بـ ${esc(school)}: ${phone}">${tel}<span dir="ltr">${fmt(phone)}</span></a>` : ""}
@@ -1643,6 +1705,7 @@ function render() {
   const app = $("#app");
   app.innerHTML = s ? viewMarathon(t, y, s) : y ? viewYear(t, y) : t ? viewTeacher(t) : viewLanding();
   startFx(); armReveal();
+  if (s) store.set("nw-last", [t.id, y.id, s.id]);   /* for "continue watching" on the home page */
   if (s) app.querySelectorAll("input[data-i]").forEach((el) => el.addEventListener("change", () => {
     const set = new Set(store.get(`done:${t.id}:${y.id}:${s.id}`));
     el.checked ? set.add(+el.dataset.i) : set.delete(+el.dataset.i);
@@ -1682,6 +1745,35 @@ document.addEventListener("click", (e) => {
   const box = document.getElementById("pick"); if (box) box.outerHTML = viewPicker();
   if (b.dataset.plv) { const r = document.getElementById("pickRes"); if (r && r.getBoundingClientRect().top > innerHeight * .55) r.scrollIntoView({ behavior: "smooth", block: "start" }); }
 });
+
+/* visit counter events: which buttons people actually press. Each is sent once per page load, as "event/<kind>/<where>".
+   The counter script only exists on the published site; without it this does nothing. */
+(() => {
+  const sent = new Set();
+  const ev = (kind, where) => {
+    const key = `event/${kind}/${where}`; if (sent.has(key)) return; sent.add(key);
+    try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: key, title: key, event: true }); } catch {}
+  };
+  const here = () => location.hash.slice(1).split("-")[0] || "home";
+  const page = () => location.hash.slice(1) || "home";
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest("a, button"); if (!a) return;
+    const href = a.getAttribute("href") || "";
+    if (href.includes("wa.me")) ev("whatsapp", here());
+    else if (href.includes("t.me/")) ev("telegram", here());
+    else if (href.startsWith("tel:")) ev("call", `${here()}-${href.slice(4)}`);
+    else if (a.dataset.seek !== undefined) ev("play", page());
+    else if (a.classList.contains("yt-out")) ev("youtube", page());
+    else if (a.dataset.pdf) ev("pdf-view", a.dataset.pdf.split("/").pop());
+    else if (a.hasAttribute("download")) ev("pdf-download", href.split("/").pop());
+    else if (a.dataset.plv) { const [st] = pickState(); ev("level", `${st}-${a.dataset.plv}`); }
+    else if (a.dataset.go === "pick") ev("start", "home");
+    else if (a.id === "anthemBtn") ev("anthem", here());
+    else if (a.classList.contains("rgo") || a.classList.contains("rthumb")) ev("resume", "home");
+    else if (href.endsWith("-tour")) ev("tour", here());
+  }, true);
+  document.addEventListener("change", (e) => { if (e.target.id === "tourQ" && e.target.value.trim()) ev("tour-search", plain(e.target.value)); });
+})();
 
 /* Nawafid anthem: starts when a visitor arrives. Browsers block sound until the first tap or key press,
    so if autoplay is refused it starts on that first interaction. A visitor who stops it is remembered. */
