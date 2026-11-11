@@ -347,7 +347,7 @@ img { max-width: 100%; }
 .tfind:focus-within { border-color: var(--acc); box-shadow: 0 0 0 3px color-mix(in srgb, var(--acc) 25%, transparent); }
 .tfind svg { width: 20px; height: 20px; flex: none; fill: var(--muted); }
 .tfind input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--fg); font: inherit; font-size: 16px; }
-.tday[hidden], .tday li[hidden], .tnone[hidden] { display: none; }
+.tday[hidden], .tday li[hidden], .tnone[hidden], .anthem[hidden] { display: none; }
 .tposter { margin: 0; }
 .tposter a { display: block; max-width: 760px; margin-inline: auto; border-radius: 20px; overflow: hidden; border: 1px solid var(--line); background: #fff; box-shadow: 0 18px 40px -28px rgba(0, 0, 0, .6); cursor: zoom-in; }
 .tposter img { display: block; width: 100%; height: auto; }
@@ -995,6 +995,7 @@ const DATA = {
       social: { youtube: "https://www.youtube.com/@oussamalouergli", facebook: "https://www.facebook.com/oussamalouergli", instagram: "https://www.instagram.com/louerglioussama/" },
       support: { ad: "ad_ouargli.webp", mid: [1, 2, 3, 4], sec: [] } },
     { id: "faidi", name: "الأستاذ الفايدي", subject: "علوم طبيعية", photo: "t_faidi.webp", online: "o_faidi.webp", years: [],
+      anthem: false,   /* the owner asked for no music on this teacher's pages */
       social: { youtube: "https://www.youtube.com/channel/UCd4ljTpVJkIS24lUBmyVdIA", facebook: "https://www.facebook.com/prof.elfaidi.science",
         instagram: "https://www.instagram.com/prof.elfaidi.science/" },
       /* in-person review sessions around the country: [ISO date, label, [[wilaya, school, address, phone], …]]; a wilaya with no school yet shows "to be announced" */
@@ -1791,10 +1792,12 @@ document.addEventListener("click", (e) => {
   const btn = document.getElementById("anthemBtn"), stateEl = document.getElementById("anthemState"), ico = document.getElementById("anthemIco");
   /* the platform anthem everywhere, except on the pages of a teacher who has his own song */
   const MAIN = { src: "nawafid_anthem.mp3?v=2", name: "أنشودة نوافذ" };
-  const trackFor = () => { const t = DATA.teachers.find((x) => x.id === location.hash.slice(1).split("-")[0]); return t && t.anthem ? t.anthem : MAIN; };
+  /* a teacher with `anthem: false` has no music at all on his pages: nothing plays and the button is hidden */
+  const NONE = { src: "", name: "", none: true };
+  const trackFor = () => { const t = DATA.teachers.find((x) => x.id === location.hash.slice(1).split("-")[0]); return t && t.anthem === false ? NONE : t && t.anthem ? t.anthem : MAIN; };
   let track = trackFor();
-  const audio = new Audio(track.src);
-  audio.preload = "auto"; audio.volume = 1;
+  const audio = new Audio(); if (!track.none) audio.src = track.src;
+  audio.preload = "auto"; audio.volume = 1; btn.hidden = !!track.none;
   const nameEl = document.getElementById("anthemName"); nameEl.textContent = track.name;
   const PLAY = '<path d="M8 5v14l11-7z"/>', PAUSE = '<path d="M7 5h4v14H7zm6 0h4v14h-4z"/>';
   const pref = () => { try { return localStorage.getItem("nw-anthem"); } catch { return null; } };
@@ -1807,7 +1810,7 @@ document.addEventListener("click", (e) => {
     ico.innerHTML = on ? PAUSE : PLAY;
   };
   ["play", "pause", "ended"].forEach((ev) => audio.addEventListener(ev, paint));
-  const play = () => audio.play().then(() => { disarm(); return true; }).catch(() => false);
+  const play = () => track.none ? Promise.resolve(true) : audio.play().then(() => { disarm(); return true; }).catch(() => false);
   const onFirst = (e) => { if (e.target.closest && e.target.closest("#anthemBtn, [data-seek], #ytPlayer, .yt-out")) { disarm(); return; } play(); };
   const EVENTS = ["pointerdown", "keydown", "touchend"];
   const disarm = () => EVENTS.forEach((ev) => removeEventListener(ev, onFirst, true));
@@ -1820,7 +1823,9 @@ document.addEventListener("click", (e) => {
   /* entering or leaving such a teacher's pages swaps the song; moving between his own pages leaves it playing */
   addEventListener("hashchange", () => {
     const next = trackFor(); if (next.src === track.src) return;
-    track = next; audio.pause(); audio.src = track.src; nameEl.textContent = track.name; paint();
+    track = next; audio.pause(); btn.hidden = !!track.none;
+    if (track.none) { disarm(); return; }
+    audio.src = track.src; nameEl.textContent = track.name; paint();
     if (pref() !== "off") play().then((ok) => { if (!ok) EVENTS.forEach((ev) => addEventListener(ev, onFirst, true)); });
   });
   paint();
