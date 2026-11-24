@@ -383,6 +383,10 @@ img { max-width: 100%; }
 .tfind svg { width: 20px; height: 20px; flex: none; fill: var(--muted); }
 .tfind input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--fg); font: inherit; font-size: 16px; }
 .tday[hidden], .tday li[hidden], .tnone[hidden], .anthem[hidden] { display: none; }
+.tday .wtop { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.tday .ttime { font-family: var(--display); font-weight: 800; font-size: 13.5px; padding: 2px 11px; border-radius: 999px; background: var(--tint); color: var(--fg); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tour-hd .tgift { flex-basis: 100%; margin: 4px 0 0; padding: 10px 14px; border-radius: 14px; background: #0a2029; color: #fff; font-family: var(--display); font-weight: 800; font-size: 15px; display: flex; align-items: center; gap: 10px; }
+.tour-hd .tgift span { font-size: 20px; }
 .tposter { margin: 0; }
 .tposter a { display: block; max-width: 760px; margin-inline: auto; border-radius: 20px; overflow: hidden; border: 1px solid var(--line); background: #fff; box-shadow: 0 18px 40px -28px rgba(0, 0, 0, .6); cursor: zoom-in; }
 .tposter img { display: block; width: 100%; height: auto; }
@@ -955,6 +959,25 @@ const DATA = {
   teachers: [
     { id: "salim", name: "الأستاذ سليم مختارة", subject: "رياضيات", photo: "t_salim.webp", online: "o_salim.webp",
       anthem: { src: "salim_anthem.mp3", name: "أنشودة «أستاذنا سليم»" },
+      /* in-person BEM 2027 sessions (from the teacher's poster): [ISO date, label, [[wilaya, school, address, phone, time], …]] */
+      tour: { title: "الدورات الحضورية · BEM 2027", sub: "السنة الرابعة متوسط · مع الأستاذ سليم مختارة في ولايتك",
+        gift: "هدية لكلّ التلاميذ: مخزن دروس الفصل الأول مجانًا", days: [
+        ["2026-12-04", "الجمعة 04 ديسمبر", [["وهران", "مدرسة الياسمين", "حي السلام، خلف مقهى اسطنبول", "0775202101", "14:00 – 17:00"]]],
+        ["2026-12-22", "الثلاثاء 22 ديسمبر", [["وهران", "مدرسة الصديقية", "حي الصديقية، بجانب عيادة قارة", "0781810111", "14:00 – 17:00"]]],
+        ["2026-12-23", "الأربعاء 23 ديسمبر", [["الشلف", "مدرسة الفكر الرائد", "مقابل متوسطة زياني دلفي (DNC)", "0770198248", "9:00 – 12:00"]]],
+        ["2026-12-24", "الخميس 24 ديسمبر", [["البليدة", "أكاديمية الفتح", "بولفار 20 متر، مقابل OPGI", "0557951896", "9:00 – 12:00"],
+          ["القليعة", "أكاديمية المناهل للعلوم", "المنطقة الحضرية الجديدة، تجزئة 37", "0669098726", "14:00 – 17:00"]]],
+        ["2026-12-25", "الجمعة 25 ديسمبر", [["الشراقة", "مدرسة بصمتي", "أمام محطة الحافلات", "0674479136", "9:00 – 12:00"],
+          ["اسطاوالي", "مدرسة الخوارزمي", "فيلا شحاط، أمام مخبزة الوفاق", "0771624425", "14:30 – 17:30"]]],
+        ["2026-12-26", "السبت 26 ديسمبر", [["المسيلة", "مركز الطفل النموذجي", "حي لاسيتي، مقابل المكتبة المركزية", "0657815858", "14:00 – 17:00"]]],
+        ["2026-12-27", "الأحد 27 ديسمبر", [["سطيف", "أكاديمية التميز", "حي ريفالي، سطيف وسط", "0551631352", "9:00 – 12:00"]]],
+        ["2026-12-28", "الاثنين 28 ديسمبر", [["قسنطينة · سيدي مبروك", "مدرسة لوصيف", "سيدي مبروك العلوي", "0551405357", "9:00 – 12:00"],
+          ["قسنطينة · النوفال", "مدرسة عواطي", "UV7، أمام محطة ترامواي الاستقلال", "0550016617", "9:00 – 12:00"]]],
+        ["2026-12-29", "الثلاثاء 29 ديسمبر", [["بسكرة", "مركز عصادي للتعليم", "الكورس، خلف متوسطة بطيبي", "0654616956", "9:00 – 12:00"],
+          ["باتنة", "مدرسة إقليدس", "حي السطا، مقابل عمارات فرماجة", "0667026707", "14:00 – 17:00"]]],
+        ["2026-12-31", "الخميس 31 ديسمبر", [["عنابة", "مدرسة النخبة", "حي لاكولون", "0654802307", "9:00 – 12:00"]]],
+        ["2027-01-01", "الجمعة 01 جانفي", [["البليدة · أولاد يعيش", "مدرسة أوليفين", "محطة الحافلات، قرب المركز التجاري جليل", "0542554839", "9:00 – 12:00"]]],
+      ] },
       social: { youtube: "https://www.youtube.com/@salimmokhtara", facebook: "https://www.facebook.com/Salim-Mokhtara-%D8%B3%D9%84%D9%8A%D9%85-%D9%85%D8%AE%D8%AA%D8%A7%D8%B1%D8%A9-1921629687886837/",
         instagram: "https://www.instagram.com/salim_mokhtara/",
         telegram: "https://t.me/salim_mokhtara" },
@@ -1595,7 +1618,8 @@ function tourBlock(t) {
       ${nx ? `<p class="tnext">الدورة القادمة: <b>${esc(nx[1])}</b> · ${nx[2].map((s) => esc(s[0])).join(" و")}</p>` : ""}</div></div>${body}`;
   return `<div class="tour-hd" id="${t.id}-tour-sec">
     <div class="tx"><span class="ttag">${pin}دورات حضورية</span><h2>${esc(tr.title)}</h2><p>${esc(tr.sub || "")}</p>
-      ${nx ? `<p class="tnext">الدورة القادمة: <b>${esc(nx[1])}</b> · ${nx[2].map((s) => esc(s[0])).join(" و")}</p>` : ""}</div></div>
+      ${nx ? `<p class="tnext">الدورة القادمة: <b>${esc(nx[1])}</b> · ${nx[2].map((s) => esc(s[0])).join(" و")}</p>` : ""}</div>
+    ${tr.gift ? `<p class="tgift"><span aria-hidden="true">🎁</span>${esc(tr.gift)}</p>` : ""}</div>
   <label class="tfind"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 3a7 7 0 1 0 4.4 12.5l4.6 4.5 1.4-1.4-4.5-4.6A7 7 0 0 0 10 3zm0 2a5 5 0 1 1 0 10 5 5 0 0 1 0-10z"/></svg>
     <input type="search" id="tourQ" placeholder="ابحث عن ولايتك: سطيف، بجاية، باتنة…" autocomplete="off" aria-label="ابحث عن ولايتك"></label>
   <p class="tnone" id="tourNone" hidden>لا توجد دورة بهذا الاسم حاليًا. جرّب اسم ولاية أو مدينة أخرى.</p>
@@ -1603,8 +1627,8 @@ function tourBlock(t) {
     const [dayName, num, month] = label.split(" ");
     return `<article class="tday${d < iso ? " past" : ""}${i === nextIdx ? " next" : ""}">
       <header><span class="dnum">${esc(num)}</span><span class="dtxt"><b>${esc(dayName)}</b><small>${esc(month)}</small></span>${i === nextIdx ? '<span class="tflag">الدورة القادمة</span>' : d < iso ? '<span class="tflag done">انتهت</span>' : ""}</header>
-      <ul>${stops.map(([w, school, addr, phone]) => `<li data-w="${esc(plain([w, school, addr].filter(Boolean).join(" ")))}">
-        <span class="wil">${pin}${esc(w)}</span>
+      <ul>${stops.map(([w, school, addr, phone, time]) => `<li data-w="${esc(plain([w, school, addr].filter(Boolean).join(" ")))}">
+        <span class="wtop"><span class="wil">${pin}${esc(w)}</span>${time ? `<span class="ttime" dir="ltr">${esc(time)}</span>` : ""}</span>
         ${school ? `<b>${esc(school)}</b>${addr ? `<small>${esc(addr)}</small>` : ""}` : `<small class="tba">المكان يُعلن قريبًا</small>`}
         ${phone ? `<a class="tcall" href="tel:${phone}" aria-label="اتصل بـ ${esc(school)}: ${phone}">${tel}<span dir="ltr">${fmt(phone)}</span></a>` : ""}
       </li>`).join("")}</ul></article>`;
